@@ -2446,7 +2446,7 @@ async function magicCreateProject() {
     const container = document.getElementById('magic-bar-content');
     
     if (!apiKey) {
-        showErrorInMagicBar("Clé API absente. Configurez-la dans les réglages en haut à droite.");
+        showErrorInMagicBar("Clé API absente. Configurez-la dans les réglages.");
         return;
     }
 
@@ -2596,7 +2596,11 @@ async function generateAIAnalysis() {
     });
 
      if (projectData.length === 0) {
-        aiContainer.innerHTML = `<p class="text-muted small">Ajoutez des projets pour obtenir une analyse.</p>`;
+        aiContainer.innerHTML = `<p class="text-muted small">Ajoutez des projets pour obtenir une analyse.<br>
+            <button class="btn-orbit btn-secondary btn-sm" onclick="resetAIView()">
+                    <i data-lucide="x" style="width: 12px; height: 12px;"></i>
+                    <span>Fermer</span>
+                </button> </p>`;
         return;
     }
 
