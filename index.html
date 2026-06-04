@@ -2596,11 +2596,14 @@ async function generateAIAnalysis() {
     });
 
      if (projectData.length === 0) {
-        aiContainer.innerHTML = `<p class="text-muted small">Ajoutez des projets pour obtenir une analyse.<br>
-            <button class="btn-orbit btn-secondary btn-sm" onclick="resetAIView()">
+        aiContainer.innerHTML = `<p class="text-muted small">Ajoutez des projets pour obtenir une analyse.
+            <div class="d-flex gap-2">
+<button class="btn-orbit btn-secondary btn-sm" onclick="resetAIView()">
                     <i data-lucide="x" style="width: 12px; height: 12px;"></i>
                     <span>Fermer</span>
-                </button> </p>`;
+                </button>
+            </div>
+            </p>`;
         return;
     }
 
