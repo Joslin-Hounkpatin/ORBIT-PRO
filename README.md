@@ -93,7 +93,7 @@ Ce projet est **100% Client-Side.** Aucune base de données ou serveur n'est req
 
 &#x20;
 
-&#x20; git clone https://github.com/Joslin-Hounkpatin/orbit-pm.git
+&#x20; git clone https://github.com/Joslin-Hounkpatin/ORBIT-PRO.git
 
 
 
