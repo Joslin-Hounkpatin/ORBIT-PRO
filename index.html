@@ -1,0 +1,2767 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="favicon orbit.png">
+
+    <title>ORBIT PRO - Pilotage de Projets</title>
+    
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+   
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+       
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #22222e;
+            --border-color: #2a2a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7b;
+            --accent-primary: #6366f1;
+            --accent-primary-hover: #818cf8;
+            --success: #22c55e;
+            --success-bg: rgba(34, 197, 94, 0.15);
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.15);
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.15);
+            --info: #3b82f6;
+            --info-bg: rgba(59, 130, 246, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        @media (hover: hover) {
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    }
+    
+
+        
+        .navbar-orbit {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary) !important;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--info));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .navbar-controls {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .btn-export {
+    padding: 0.35rem 0.7rem !important; 
+    height: 38px !important;            
+    font-size: 0.8rem !important;       
+    gap: 0.4rem !important;             
+}
+
+.btn-export i {
+    font-size: 0.9rem !important;       
+}
+
+        
+        .currency-selector {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        @media (hover: hover) {
+
+        .currency-selector:hover {
+            border-color: var(--accent-primary);
+        }
+    }
+        .currency-selector:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+      
+        
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .page-header {
+            margin-bottom: 1.25rem;
+        }
+        
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+      
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        @media (hover: hover) {
+
+        .kpi-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+    }
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .kpi-icon.primary {
+            background: var(--info-bg);
+            color: var(--info);
+        }
+        
+        .kpi-icon.success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        
+        .kpi-icon.warning {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+        
+        .kpi-icon.danger {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+        
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .kpi-trend.up {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        
+        .kpi-trend.down {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+        
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .kpi-label {
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+        }
+        
+       
+        .chart-card {
+    overflow-x: auto !important;
+    scrollbar-width: thin; /* Pour Firefox */
+    scrollbar-color: var(--accent-primary) transparent;
+}
+
+
+.chart-card::-webkit-scrollbar {
+    height: 6px;
+}
+.chart-card::-webkit-scrollbar-thumb {
+    background-color: var(--accent-primary);
+    border-radius: 10px;
+}
+
+
+#progressChart {
+    min-width: 100%;
+}
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 992px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+        }
+        
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .chart-container {
+            height: 280px;
+        }
+        
+     
+        
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .projects-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .projects-table th {
+            background: var(--bg-secondary);
+            padding: 0.875rem 1rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .projects-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+        
+        .projects-table tbody tr {
+            transition: background 0.2s ease;
+        }
+       @media (hover: hover) {
+ 
+        .projects-table tbody tr:hover {
+            background: var(--bg-card-hover);
+        }
+    }
+        .projects-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .project-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .project-description {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        
+        
+        .dual-progress {
+            width: 200px;
+        }
+        
+        .dual-progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-fill.progress {
+            background: linear-gradient(90deg, var(--accent-primary), var(--info));
+        }
+        
+        .progress-fill.time {
+            background: linear-gradient(90deg, var(--warning), #fbbf24);
+        }
+        
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+        }
+        
+        
+        .health-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .health-badge.sain {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        
+        .health-badge.vigilance {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+        
+        .health-badge.critique {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+        
+        .health-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+    
+        
+        .btn-orbit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+        @media (hover: hover) {
+
+        .btn-primary:hover {
+            background: var(--accent-primary-hover);
+            transform: translateY(-1px);
+        }
+    }
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+       @media (hover: hover) {
+ 
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--text-muted);
+        }
+    }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        @media (hover: hover) {
+
+        .btn-success:hover {
+            filter: brightness(1.1);
+        }
+    }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        @media (hover: hover) {
+
+        .btn-danger:hover {
+            filter: brightness(1.1);
+        }
+    }
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            justify-content: center;
+        }
+        
+       
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        @media (hover: hover) {
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+    }
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+        
+        
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .form-input.is-invalid {
+            border-color: var(--danger);
+        }
+        
+        .form-error {
+            font-size: 0.75rem;
+            color: var(--danger);
+            margin-top: 0.375rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.875rem;
+            background: var(--warning-bg);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            color: var(--warning);
+            margin-bottom: 1rem;
+        }
+        
+       
+        
+        .tasks-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .tasks-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .tasks-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+        }
+        
+        .task-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .task-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        
+        .task-name-input {
+            flex: 1;
+            margin-right: 0.5rem;
+        }
+        
+        .task-fields {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+        
+        @media (max-width: 640px) {
+            .task-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .task-field label {
+            display: block;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .task-field input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.8125rem;
+        }
+        
+        .task-field input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        
+        .empty-tasks {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+        
+        .empty-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+        
+
+        
+        .text-success { color: var(--success) !important; }
+        .text-warning { color: var(--warning) !important; }
+        .text-danger { color: var(--danger) !important; }
+        .text-muted { color: var(--text-muted) !important; }
+        
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-3 { margin-top: 1rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        
+      
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            min-width: 280px;
+        }
+        
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        
+        .toast-message {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+        
+        
+        .loader {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+       
+
+body.modal-open {
+    overflow: hidden !important;
+    height: 100vh;
+}
+
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    padding: 20px; 
+    overflow-y: auto; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px; 
+    margin-bottom: 40px; 
+    position: relative;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+
+button, .btn-orbit, .currency-selector, select {
+    touch-action: manipulation; 
+    -webkit-tap-highlight-color: transparent; /
+}
+
+@media (hover: none) {
+    
+    .kpi-card:hover, .btn-orbit:hover {
+        transform: none !important;
+    }
+    
+    .btn-orbit:active {
+        opacity: 0.7;
+        transform: scale(0.98); /
+    }
+}
+
+
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 10px; 
+    }
+
+    .modal-content {
+        margin-top: 10px;
+        margin-bottom: 100px; 
+    }
+
+    
+    .form-input, input, textarea, select {
+        font-size: 16px !important;
+    }
+    
+  
+    .modal-body {
+        padding: 1rem !important;
+    }
+}
+
+      @media (max-width: 768px) {
+    
+    .btn-text { 
+        display: none; 
+    }
+    
+    .navbar-brand {
+        margin-right: auto !important; 
+        padding-right: 20px;          
+    }
+
+     .navbar-brand span {
+        display: none !important;
+    }
+
+    .navbar-orbit {
+        padding: 1rem 1.5rem;
+    }
+
+    .navbar-controls {
+        gap: 0.5rem;
+    }
+
+    .btn-orbit {
+        padding: 0.6rem;
+    }
+
+    
+    
+    
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+    
+    .kpi-card {
+        padding: 1rem;
+    }
+    
+    .kpi-value {
+        font-size: 1.25rem;
+    }
+    
+    .kpi-label {
+        font-size: 0.7rem;
+    }
+
+   
+ 
+    .projects-table th:nth-child(2), .projects-table td:nth-child(2),
+    .projects-table th:nth-child(3), .projects-table td:nth-child(3),
+    .projects-table th:nth-child(4), .projects-table td:nth-child(4) {
+        display: none;
+    }
+
+   
+    .dual-progress {
+        width: 80px !important;
+    }
+
+    .progress-labels {
+        font-size: 0.6rem;
+    }
+
+
+     
+    .page-header {
+        margin-bottom: 1rem !important;
+        margin-top: 0.5rem !important;
+    }
+
+  
+    .page-title {
+        font-size: 1.1rem !important; 
+        font-weight: 700;
+        margin-bottom: 2px !important;
+    }
+
+   
+    .page-subtitle {
+        font-size: 0.75rem !important; 
+        color: var(--text-muted);
+        line-height: 1.2;
+    }
+
+
+
+}
+
+
+
+.kpi-card, .chart-card, .table-card {
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}  
+
+.task-item {
+        padding: 0.75rem !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .task-fields {
+        display: flex;
+        flex-direction: column; 
+        gap: 10px;
+    }
+    
+    .form-input, .task-field input {
+        font-size: 16px !important; 
+    }
+
+
+    .form-row {
+        display: flex !important;
+        flex-direction: column !important; 
+        gap: 10px !important; 
+    }
+
+   
+    .form-input[type="date"] {
+        padding: 5px 12px !important; 
+        height: 42px !important;      
+        font-size: 0.9rem !important; 
+        width: 100% !important;       
+        box-sizing: border-box !important; 
+    }
+
+    
+    .form-group {
+        margin-bottom: 0.75rem !important;
+        width: 100% !important;
+    }
+
+    
+    .modal-content {
+        overflow-x: hidden !important; 
+    }
+
+    </style>
+</head>
+<body>
+   
+
+    <nav class="navbar-orbit">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <a href="#" class="navbar-brand">
+                <div class="logo-icon">
+                    <i data-lucide="orbit" style="width: 20px; height: 20px; color: white;"></i>
+                </div>
+                <span>ORBIT PRO</span>
+            </a>
+            
+            <div class="navbar-controls">
+                <select id="currencySelector" class="currency-selector">
+                    <option value="XOF">XOF (FCFA)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="USD">USD ($)</option>
+                </select>
+                
+               <button class="btn-orbit btn-secondary btn-export" onclick="exportToExcel()" title="Exporter en Excel">
+    <i class="bi bi-file-earmark-spreadsheet-fill" style="color: #1d6f42; font-size: 1.1rem;"></i>
+    <span class="btn-text">Excel</span>
+</button>
+
+                <!-- Bouton PDF -->
+               <button class="btn-orbit btn-secondary btn-export" onclick="exportToPDF()" title="Exporter en PDF">
+    <i class="bi bi-file-earmark-pdf-fill" style="color: #e11d48; font-size: 1.1rem;"></i>
+    <span class="btn-text">PDF</span>
+</button>
+                <button class="btn-orbit btn-primary" onclick="openProjectModal()">
+                    <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+                    <span class="btn-text">Nouveau Projet</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+  
+    <main class="main-container" id="mainContent">
+     
+        <header class="page-header">
+            <h1 class="page-title">Tableau de Bord</h1>
+            <p class="page-subtitle">Suivi en temps réel de vos projets et indicateurs clés</p>
+        </header>
+        
+      
+        <section class="bento-grid" id="kpiGrid">
+           
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon primary">
+                        <i data-lucide="folder-kanban" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <span class="kpi-trend up" id="projectsTrend">
+                        <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                        <span>+2</span>
+                    </span>
+                </div>
+                <div class="kpi-value" id="activeProjectsCount">0</div>
+                <div class="kpi-label">Projets Actifs</div>
+            </div>
+            
+            
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon success">
+                        <i data-lucide="wallet" style="width: 20px; height: 20px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="totalBudget">0</div>
+                <div class="kpi-label">Budget Total</div>
+            </div>
+            
+          
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon warning">
+                        <i data-lucide="flame" style="width: 20px; height: 20px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="burnRate">0</div>
+                <div class="kpi-label">Dépenses Totales</div>
+            </div>
+            
+           
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon" id="healthIcon">
+                        <i data-lucide="heart-pulse" style="width: 20px; height: 20px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="globalHealth">0%</div>
+                <div class="kpi-label">Santé Globale</div>
+            </div>
+        </section>
+        
+
+<section class="mb-4">
+    <div class="kpi-card" style="border-left: 4px solid var(--accent-primary); background: linear-gradient(145deg, var(--bg-card), #1e1e2d);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <div class="kpi-icon primary" style="width: 32px; height: 32px;">
+                    <i data-lucide="bot" style="width: 18px; height: 18px;"></i>
+                </div>
+                <h3 class="chart-title m-0" style="font-size: 1rem;">Orbit AI Consultant</h3>
+            </div>
+            <button class="btn-orbit btn-secondary btn-icon btn-sm" onclick="openSettings()" title="Configuration">
+                <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
+            </button>
+        </div>
+        
+        <div id="ai-content">
+            <p class="text-secondary small mb-3">Analyse stratégique de votre portefeuille de projets via Google Gemini.</p>
+            <button class="btn-orbit btn-primary btn-sm" onclick="generateAIAnalysis()">
+                <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                <span>Générer l'audit de risque</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+
+      
+        <section class="charts-grid" id="chartsSection">
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Progrès Réel vs Temps Écoulé</h3>
+                </div>
+                <div class="chart-container" id="progressChart"></div>
+            </div>
+            
+           
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Répartition des Dépenses par Projet</h3>
+                </div>
+                <div class="chart-container" id="expensesChart"></div>
+            </div>
+        </section>
+        
+        
+        <section class="table-card" id="tableSection">
+            <div class="table-header">
+                <h3 class="table-title">Suivi des Projets</h3>
+                <div class="table-actions">
+                    <button class="btn-orbit btn-secondary btn-sm" onclick="refreshData()">
+                        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                        <span>Actualiser</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="projects-table">
+                    <thead>
+                        <tr>
+                            <th>Projet</th>
+                            <th>Période</th>
+                            <th>Budget</th>
+                            <th>Dépensé</th>
+                            <th>Progression</th>
+                            <th>Santé</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectsTableBody">
+                        
+                    </tbody>
+                </table>
+            </div>
+            
+          
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i data-lucide="folder-open" style="width: 32px; height: 32px;"></i>
+                </div>
+                <h3 class="empty-title">Aucun projet</h3>
+                <p class="empty-description">Créez votre premier projet pour commencer le suivi</p>
+                <button class="btn-orbit btn-primary" onclick="openProjectModal()">
+                    <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+                    <span>Créer un projet</span>
+                </button>
+            </div>
+        </section>
+    </main>
+    
+  
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Nouveau Projet</h2>
+                <button class="modal-close" onclick="closeProjectModal()">
+                    <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            
+            <form id="projectForm" onsubmit="saveProject(event)">
+                <div class="modal-body">
+                   
+                    <div class="form-warning" id="noTasksWarning" style="display: none;">
+                        <i data-lucide="alert-triangle" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>Sans tâches, le budget et l'avancement doivent être saisis manuellement. Les calculs automatiques ne seront pas disponibles.</span>
+                    </div>
+                  
+<div id="magic-bar-container" class="mb-4 p-3" style="background: rgba(99, 102, 241, 0.05); border: 1px dashed var(--accent-primary); border-radius: var(--radius-md);">
+    <div id="magic-bar-content">
+        <label class="form-label text-primary fw-bold" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+            <i data-lucide="cpu" style="width: 14px; height: 14px; margin-right: 5px;"></i> PLANIFICATION ASSISTÉE (IA)
+        </label>
+        <div class="d-flex gap-2">
+            <input type="text" id="magicInput" class="form-input" placeholder="Ex: Créer un site e-commerce de 2M en 3 mois...">
+            <button type="button" class="btn-orbit btn-primary" onclick="magicCreateProject()" id="magicBtn">
+                <i data-lucide="zap" style="width: 18px; height: 18px;"></i>
+            </button>
+        </div>
+        <p class="mt-2 mb-0" style="font-size: 0.65rem; color: var(--text-muted);">Décrivez votre projet, l'IA configurera les dates, le budget et les tâches.</p>
+    </div>
+</div>
+<hr class="my-4" style="opacity: 0.1;">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectName">Nom du projet *</label>
+                        <input type="text" class="form-input" id="projectName" placeholder="Ex: Refonte site web" required>
+                    </div>
+                    
+                  
+                    <div class="form-group">
+                        <label class="form-label" for="projectDescription">Description (facultatif)</label>
+                        <textarea class="form-input" id="projectDescription" rows="2" placeholder="Décrivez brièvement le projet..."></textarea>
+                    </div>
+                    
+                   
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="projectStartDate">Date de début *</label>
+                            <input type="date" class="form-input" id="projectStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="projectEndDate">Date de fin (Deadline) *</label>
+                            <input type="date" class="form-input" id="projectEndDate" required>
+                            <div class="form-error" id="dateError" style="display: none;">La date de fin doit être après la date de début</div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div id="manualInputs" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="manualBudget">Budget prévu</label>
+                                <input type="number" class="form-input" id="manualBudget" min="0" step="0.01" placeholder="0" oninput="validateInput(this)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="manualSpent">Budget dépensé</label>
+                                <input type="number" class="form-input" id="manualSpent" min="0" step="0.01" placeholder="0" oninput="validateInput(this)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="manualProgress">Avancement (%)</label>
+                            <input type="number" class="form-input" id="manualProgress" min="0" max="100" step="1" placeholder="0" oninput="validateInput(this)">
+                        </div>
+                    </div>
+                    
+                   
+                    <div class="tasks-section">
+                        <div class="tasks-header">
+                            <h4 class="tasks-title">Tâches du projet</h4>
+                            <button type="button" class="btn-orbit btn-secondary btn-sm" onclick="addTask()">
+                                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                                <span>Ajouter une tâche</span>
+                            </button>
+                        </div>
+                        
+                        <div id="tasksList">
+                            
+                        </div>
+                        
+                        <div class="empty-tasks" id="emptyTasks">
+                            <i data-lucide="clipboard-list" style="width: 24px; height: 24px; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                            <p>Ajoutez des tâches pour un calcul automatique du budget et de l'avancement</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-orbit btn-secondary" onclick="closeProjectModal()">Annuler</button>
+                    <button type="submit" class="btn-orbit btn-primary" id="submitBtn">
+                        <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+                        <span>Enregistrer</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+   
+    <div class="toast-container" id="toastContainer"></div>
+
+  
+    <script>
+        
+        const CURRENCY_CONFIG = {
+            XOF: { symbol: 'FCFA', rate: 1, decimals: 0 },
+            EUR: { symbol: '€', rate: 0.00152, decimals: 2 },
+            USD: { symbol: '$', rate: 0.00166, decimals: 2 }
+        };
+        
+     
+        let currentCurrency = 'XOF';
+     
+        let editingProjectId = null;
+        
+        
+        let progressChartInstance = null;
+        let expensesChartInstance = null;
+        
+       
+        class Task {
+            constructor(name = '', budgetPrevu = 0, budgetDepense = 0, avancement = 0) {
+                this.id = Date.now() + Math.random().toString(36).substr(2, 9);
+                this.name = name;
+                this.budgetPrevu = Math.max(0, budgetPrevu); 
+                this.budgetDepense = Math.max(0, budgetDepense);
+                this.avancement = Math.min(100, Math.max(0, avancement)); 
+            }
+            
+            
+            getEarnedValue() {
+                return this.budgetPrevu * (this.avancement / 100);
+            }
+        }
+        
+       
+        class Project {
+            constructor(name, description, dateDebut, dateFin, tasks = []) {
+                this.id = Date.now() + Math.random().toString(36).substr(2, 9);
+                this.name = name;
+                this.description = description || '';
+                this.dateDebut = dateDebut;
+                this.dateFin = dateFin;
+                this.tasks = tasks.map(t => new Task(t.name, t.budgetPrevu, t.budgetDepense, t.avancement));
+                
+                
+                this.manualBudget = 0;
+                this.manualSpent = 0;
+                this.manualProgress = 0;
+                this.createdAt = new Date().toISOString();
+            }
+            
+            
+            getBudgetPrevu() {
+                if (this.tasks.length > 0) {
+                    return this.tasks.reduce((sum, task) => sum + task.budgetPrevu, 0);
+                }
+                return Math.max(0, this.manualBudget);
+            }
+            
+           
+            getBudgetDepense() {
+                if (this.tasks.length > 0) {
+                    return this.tasks.reduce((sum, task) => sum + task.budgetDepense, 0);
+                }
+                return Math.max(0, this.manualSpent);
+            }
+            
+           
+            getAvancementPondere() {
+                if (this.tasks.length > 0) {
+                    const budgetTotal = this.getBudgetPrevu();
+                    if (budgetTotal === 0) return 0;
+                    
+                    const earnedValueTotal = this.tasks.reduce((sum, task) => sum + task.getEarnedValue(), 0);
+                    return (earnedValueTotal / budgetTotal) * 100;
+                }
+                return Math.min(100, Math.max(0, this.manualProgress));
+            }
+            
+            
+            getTempsEcoule() {
+                const debut = new Date(this.dateDebut);
+                const fin = new Date(this.dateFin);
+                const maintenant = new Date();
+                
+                const dureeTotal = fin - debut;
+                if (dureeTotal <= 0) return 100;
+                
+                const dureeEcoulee = maintenant - debut;
+                
+                if (dureeEcoulee <= 0) return 0;
+                if (dureeEcoulee >= dureeTotal) return 100;
+                
+                return (dureeEcoulee / dureeTotal) * 100;
+            }
+            
+            
+            getHealthStatus() {
+                const budgetPrevu = this.getBudgetPrevu();
+                const budgetDepense = this.getBudgetDepense();
+                const avancement = this.getAvancementPondere();
+                const tempsEcoule = this.getTempsEcoule();
+                
+              
+                const depassementBudget = budgetPrevu > 0 
+                    ? ((budgetDepense - budgetPrevu) / budgetPrevu) * 100 
+                    : 0;
+                
+              
+                const retard = tempsEcoule - avancement;
+                
+                
+                const budgetOk = budgetDepense <= budgetPrevu;
+                const tempsOk = avancement >= tempsEcoule;
+                
+                
+                if (budgetOk && tempsOk) {
+                    return 'sain';
+                }
+                
+                
+                if (depassementBudget > 10 || retard > 20) {
+                    return 'critique';
+                }
+                
+                
+                return 'vigilance';
+            }
+            
+           
+            getHealthScore() {
+                const budgetPrevu = this.getBudgetPrevu();
+                const budgetDepense = this.getBudgetDepense();
+                const avancement = this.getAvancementPondere();
+                const tempsEcoule = this.getTempsEcoule();
+                
+                
+                let scoreBudget = 100;
+                if (budgetPrevu > 0) {
+                    const ratio = budgetDepense / budgetPrevu;
+                    if (ratio > 1.1) scoreBudget = 0;
+                    else if (ratio > 1) scoreBudget = 50;
+                    else scoreBudget = 100;
+                }
+                
+               
+                let scoreTemps = 100;
+                if (tempsEcoule > 0) {
+                    const ratioTemps = avancement / tempsEcoule;
+                    if (ratioTemps >= 1) scoreTemps = 100;
+                    else if (ratioTemps >= 0.8) scoreTemps = 75;
+                    else if (ratioTemps >= 0.6) scoreTemps = 50;
+                    else scoreTemps = 25;
+                }
+                
+                return Math.round((scoreBudget * 0.5) + (scoreTemps * 0.5));
+            }
+        }
+        
+        class ProjectManager {
+            constructor() {
+                this.projects = this.loadFromStorage();
+            }
+            
+            
+            loadFromStorage() {
+                try {
+                    const data = localStorage.getItem('orbit_pro_projects');
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        return parsed.map(p => {
+                            const project = new Project(p.name, p.description, p.dateDebut, p.dateFin, p.tasks);
+                            project.id = p.id;
+                            project.manualBudget = p.manualBudget || 0;
+                            project.manualSpent = p.manualSpent || 0;
+                            project.manualProgress = p.manualProgress || 0;
+                            project.createdAt = p.createdAt;
+                            return project;
+                        });
+                    }
+                } catch (e) {
+                    console.error('Erreur chargement LocalStorage:', e);
+                }
+                return [];
+            }
+            
+            saveToStorage() {
+                try {
+                    localStorage.setItem('orbit_pro_projects', JSON.stringify(this.projects));
+                } catch (e) {
+                    console.error('Erreur sauvegarde LocalStorage:', e);
+                    showToast('Erreur de sauvegarde', 'error');
+                }
+            }
+            
+            
+            addProject(project) {
+                this.projects.push(project);
+                this.saveToStorage();
+            }
+            
+            
+            updateProject(id, updatedData) {
+                const index = this.projects.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    const existing = this.projects[index];
+                    Object.assign(existing, updatedData);
+                    this.saveToStorage();
+                    return true;
+                }
+                return false;
+            }
+            
+            
+            deleteProject(id) {
+                const index = this.projects.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this.projects.splice(index, 1);
+                    this.saveToStorage();
+                    return true;
+                }
+                return false;
+            }
+            
+            
+            getProjectById(id) {
+                return this.projects.find(p => p.id === id);
+            }
+            
+          
+            getTotalBudget() {
+                return this.projects.reduce((sum, p) => sum + p.getBudgetPrevu(), 0);
+            }
+            
+            
+            getTotalSpent() {
+                return this.projects.reduce((sum, p) => sum + p.getBudgetDepense(), 0);
+            }
+            
+            
+            getGlobalHealth() {
+                if (this.projects.length === 0) return 0;
+                const totalScore = this.projects.reduce((sum, p) => sum + p.getHealthScore(), 0);
+                return Math.round(totalScore / this.projects.length);
+            }
+        }
+        
+      
+        const projectManager = new ProjectManager();
+     
+        function validateInput(input) {
+            const value = parseFloat(input.value);
+            if (value < 0 || isNaN(value)) {
+                input.value = 0;
+                input.classList.add('is-invalid');
+                setTimeout(() => input.classList.remove('is-invalid'), 1000);
+            }
+            
+            
+            if (input.id === 'manualProgress' || input.dataset.type === 'progress') {
+                if (value > 100) input.value = 100;
+            }
+        }
+        
+        
+        function formatCurrency(amount) {
+            const config = CURRENCY_CONFIG[currentCurrency];
+            const converted = amount * config.rate;
+            const formatted = converted.toLocaleString('fr-FR', {
+                minimumFractionDigits: config.decimals,
+                maximumFractionDigits: config.decimals
+            });
+            return `${formatted} ${config.symbol}`;
+        }
+        
+        
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+        
+       
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: 'check-circle',
+                warning: 'alert-triangle',
+                error: 'x-circle'
+            };
+            
+            toast.innerHTML = `
+                <i data-lucide="${icons[type]}" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons({ icons: { [icons[type]]: lucide.icons[icons[type]] }, attrs: {} });
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+       
+        function openProjectModal(projectId = null) {
+            editingProjectId = projectId;
+            const modal = document.getElementById('projectModal');
+            const form = document.getElementById('projectForm');
+            const title = document.getElementById('modalTitle');
+            
+            form.reset();
+            document.getElementById('tasksList').innerHTML = '';
+            document.getElementById('emptyTasks').style.display = 'block';
+            document.getElementById('noTasksWarning').style.display = 'none';
+            document.getElementById('manualInputs').style.display = 'none';
+            document.getElementById('dateError').style.display = 'none';
+            
+            if (projectId) {
+                
+                title.textContent = 'Modifier le Projet';
+                const project = projectManager.getProjectById(projectId);
+                
+                if (project) {
+                    document.getElementById('projectName').value = project.name;
+                    document.getElementById('projectDescription').value = project.description;
+                    document.getElementById('projectStartDate').value = project.dateDebut;
+                    document.getElementById('projectEndDate').value = project.dateFin;
+                    
+                    
+                    if (project.tasks.length > 0) {
+                        project.tasks.forEach(task => {
+                            addTaskToDOM(task.name, task.budgetPrevu, task.budgetDepense, task.avancement);
+                        });
+                    } else {
+                        
+                        document.getElementById('manualInputs').style.display = 'block';
+                        document.getElementById('noTasksWarning').style.display = 'flex';
+                        document.getElementById('manualBudget').value = project.manualBudget;
+                        document.getElementById('manualSpent').value = project.manualSpent;
+                        document.getElementById('manualProgress').value = project.manualProgress;
+                    }
+                }
+            } else {
+                
+                title.textContent = 'Nouveau Projet';
+                
+                
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('projectStartDate').value = today;
+                 document.body.classList.add('modal-open');
+            }
+            
+            modal.classList.add('active');
+            lucide.createIcons();
+        }
+        
+        
+        function closeProjectModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.remove('active');
+               document.body.classList.remove('modal-open');
+            editingProjectId = null;
+        }
+        
+        
+        function saveProject(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('projectName').value.trim();
+            const description = document.getElementById('projectDescription').value.trim();
+            const dateDebut = document.getElementById('projectStartDate').value;
+            const dateFin = document.getElementById('projectEndDate').value;
+            
+            
+            if (new Date(dateFin) <= new Date(dateDebut)) {
+                document.getElementById('dateError').style.display = 'block';
+                document.getElementById('projectEndDate').classList.add('is-invalid');
+                return;
+            }
+            
+            
+            const taskElements = document.querySelectorAll('#tasksList .task-item');
+            const tasks = [];
+            
+            taskElements.forEach(taskEl => {
+                const taskName = taskEl.querySelector('[data-field="name"]').value.trim();
+                const budgetPrevu = parseFloat(taskEl.querySelector('[data-field="budgetPrevu"]').value) || 0;
+                const budgetDepense = parseFloat(taskEl.querySelector('[data-field="budgetDepense"]').value) || 0;
+                const avancement = parseFloat(taskEl.querySelector('[data-field="avancement"]').value) || 0;
+                
+                if (taskName) {
+                    tasks.push({ name: taskName, budgetPrevu, budgetDepense, avancement });
+                }
+            });
+            
+            if (editingProjectId) {
+                
+                const updateData = {
+                    name,
+                    description,
+                    dateDebut,
+                    dateFin,
+                    tasks: tasks.map(t => new Task(t.name, t.budgetPrevu, t.budgetDepense, t.avancement))
+                };
+                
+                
+                if (tasks.length === 0) {
+                    updateData.manualBudget = parseFloat(document.getElementById('manualBudget').value) || 0;
+                    updateData.manualSpent = parseFloat(document.getElementById('manualSpent').value) || 0;
+                    updateData.manualProgress = parseFloat(document.getElementById('manualProgress').value) || 0;
+                }
+                
+                projectManager.updateProject(editingProjectId, updateData);
+                showToast('Projet mis à jour avec succès');
+            } else {
+               
+                const project = new Project(name, description, dateDebut, dateFin, tasks);
+                
+                if (tasks.length === 0) {
+                    project.manualBudget = parseFloat(document.getElementById('manualBudget').value) || 0;
+                    project.manualSpent = parseFloat(document.getElementById('manualSpent').value) || 0;
+                    project.manualProgress = parseFloat(document.getElementById('manualProgress').value) || 0;
+                }
+                
+                projectManager.addProject(project);
+                showToast('Projet créé avec succès');
+            }
+            
+            closeProjectModal();
+            refreshData();
+        }
+        
+       
+        function addTask() {
+            addTaskToDOM('', 0, 0, 0);
+        }
+        
+        
+        function addTaskToDOM(name = '', budgetPrevu = 0, budgetDepense = 0, avancement = 0) {
+            const tasksList = document.getElementById('tasksList');
+            const emptyTasks = document.getElementById('emptyTasks');
+            const noTasksWarning = document.getElementById('noTasksWarning');
+            const manualInputs = document.getElementById('manualInputs');
+            
+            emptyTasks.style.display = 'none';
+            noTasksWarning.style.display = 'none';
+            manualInputs.style.display = 'none';
+            
+            const taskId = Date.now() + Math.random().toString(36).substr(2, 9);
+            
+            const taskHtml = `
+                <div class="task-item" data-task-id="${taskId}">
+                    <div class="task-item-header">
+                        <input type="text" class="form-input task-name-input" data-field="name" 
+                               placeholder="Nom de la tâche" value="${name}" required>
+                        <button type="button" class="btn-orbit btn-danger btn-icon btn-sm" onclick="removeTask('${taskId}')">
+                            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                        </button>
+                    </div>
+                    <div class="task-fields">
+                        <div class="task-field">
+                            <label>Budget prévu</label>
+                            <input type="number" data-field="budgetPrevu" min="0" step="0.01" 
+                                   value="${budgetPrevu}" placeholder="0" oninput="validateInput(this)">
+                        </div>
+                        <div class="task-field">
+                            <label>Budget dépensé</label>
+                            <input type="number" data-field="budgetDepense" min="0" step="0.01" 
+                                   value="${budgetDepense}" placeholder="0" oninput="validateInput(this)">
+                        </div>
+                        <div class="task-field">
+                            <label>Avancement (%)</label>
+                            <input type="number" data-field="avancement" data-type="progress" min="0" max="100" step="1" 
+                                   value="${avancement}" placeholder="0" oninput="validateInput(this)">
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            tasksList.insertAdjacentHTML('beforeend', taskHtml);
+            lucide.createIcons();
+        }
+        
+        
+        function removeTask(taskId) {
+            const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+            if (taskElement) {
+                taskElement.remove();
+                
+              
+                const remainingTasks = document.querySelectorAll('#tasksList .task-item');
+                if (remainingTasks.length === 0) {
+                    document.getElementById('emptyTasks').style.display = 'block';
+                    document.getElementById('noTasksWarning').style.display = 'flex';
+                    document.getElementById('manualInputs').style.display = 'block';
+                }
+            }
+        }
+        
+        
+        function refreshData() {
+    updateKPIs();
+    updateProjectsTable();
+    
+    
+    setTimeout(() => {
+        updateCharts();
+        
+        window.dispatchEvent(new Event('resize'));
+    }, 150);
+    
+    lucide.createIcons();
+}
+        
+       
+        function updateKPIs() {
+            const projects = projectManager.projects;
+            
+           
+            document.getElementById('activeProjectsCount').textContent = projects.length;
+            
+            
+            const totalBudget = projectManager.getTotalBudget();
+            document.getElementById('totalBudget').textContent = formatCurrency(totalBudget);
+            
+          
+            const totalSpent = projectManager.getTotalSpent();
+            document.getElementById('burnRate').textContent = formatCurrency(totalSpent);
+           
+            const globalHealth = projectManager.getGlobalHealth();
+            document.getElementById('globalHealth').textContent = `${globalHealth}%`;
+            
+            
+            const healthIcon = document.getElementById('healthIcon');
+            healthIcon.className = 'kpi-icon';
+            if (globalHealth >= 75) {
+                healthIcon.classList.add('success');
+            } else if (globalHealth >= 50) {
+                healthIcon.classList.add('warning');
+            } else {
+                healthIcon.classList.add('danger');
+            }
+        }
+        
+        
+        function updateProjectsTable() {
+            const tbody = document.getElementById('projectsTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const projects = projectManager.projects;
+            
+            if (projects.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                document.querySelector('.table-responsive').style.display = 'none';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            document.querySelector('.table-responsive').style.display = 'block';
+            
+            tbody.innerHTML = projects.map(project => {
+    const budgetPrevu = project.getBudgetPrevu();
+    const budgetDepense = project.getBudgetDepense();
+    const avancement = project.getAvancementPondere();
+    const tempsEcoule = project.getTempsEcoule();
+    const health = project.getHealthStatus();
+    
+    const healthLabels = { sain: 'Sain', vigilance: 'Vigilance', critique: 'Critique' };
+    
+    return `
+        <tr>
+            <td data-label="Projet">
+                <div class="project-name">${project.name}</div>
+                ${project.description ? `<div class="project-description">${project.description}</div>` : ''}
+            </td>
+            <td data-label="Période">
+                <div style="font-size: 0.8125rem;">${formatDate(project.dateDebut)}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">→ ${formatDate(project.dateFin)}</div>
+            </td>
+            <td data-label="Budget">${formatCurrency(budgetPrevu)}</td>
+            <td data-label="Dépensé" class="${budgetDepense > budgetPrevu ? 'text-danger' : ''}">${formatCurrency(budgetDepense)}</td>
+            <td data-label="Progression">
+                <div class="dual-progress">
+                    <div class="dual-progress-bar">
+                        <div class="progress-fill progress" style="width: ${Math.min(100, avancement)}%"></div>
+                    </div>
+                    <div class="dual-progress-bar">
+                        <div class="progress-fill time" style="width: ${Math.min(100, tempsEcoule)}%"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>P: ${avancement.toFixed(0)}%</span>
+                        <span>T: ${tempsEcoule.toFixed(0)}%</span>
+                    </div>
+                </div>
+            </td>
+            <td data-label="Santé">
+                <span class="health-badge ${health}">
+                    <span class="health-dot"></span>
+                    ${healthLabels[health]}
+                </span>
+            </td>
+            <td data-label="Actions">
+                <div style="display: flex; gap: 0.375rem;">
+                    <button class="btn-orbit btn-secondary btn-icon btn-sm" onclick="openProjectModal('${project.id}')">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </button>
+                    <button class="btn-orbit btn-danger btn-icon btn-sm" onclick="confirmDeleteProject('${project.id}')">
+                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+}).join('');
+        }
+        
+        
+       function confirmDeleteProject(projectId) {
+    const project = projectManager.getProjectById(projectId);
+    if (!project) return;
+
+    const modal = document.getElementById('deleteConfirmModal');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    const textSpan = document.getElementById('deleteConfirmText');
+
+    
+    textSpan.innerHTML = `Êtes-vous sûr de vouloir supprimer le projet <strong style="color:white">"${project.name}"</strong> ?<br>Cette action est irréversible.`;
+
+    
+    modal.classList.add('active');
+
+    
+    confirmBtn.onclick = function() {
+        projectManager.deleteProject(projectId);
+        showToast('Projet supprimé avec succès');
+        closeDeleteModal();
+        refreshData();
+    };
+    
+    lucide.createIcons();
+}
+
+
+function closeDeleteModal() {
+    document.getElementById('deleteConfirmModal').classList.remove('active');
+}
+        
+       
+        function updateCharts() {
+            updateProgressChart();
+            updateExpensesChart();
+        }
+        
+      
+        function updateProgressChart() {
+            const container = document.getElementById('progressChart');
+            const projects = projectManager.projects;
+            
+            if (progressChartInstance) {
+        progressChartInstance.destroy();
+        progressChartInstance = null; // Important
+    }
+    
+   
+    container.innerHTML = '';
+
+    if (projects.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p class="text-muted">Aucune donnée à afficher</p></div>';
+        return;
+    }
+    
+    const minWidthNeeded = projects.length * 70;
+    const parentWidth = container.parentElement.offsetWidth - 40; 
+    const finalWidth = Math.max(parentWidth, minWidthNeeded);
+    
+    container.style.width = finalWidth + 'px';
+
+            const categories = projects.map(p => p.name.substring(0, 15) + (p.name.length > 15 ? '...' : ''));
+            const progressData = projects.map(p => Math.round(p.getAvancementPondere()));
+            const timeData = projects.map(p => Math.round(p.getTempsEcoule()));
+            
+            const options = {
+                series: [
+                    { name: 'Progrès Réel', data: progressData },
+                    { name: 'Temps Écoulé', data: timeData }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 280,
+                    background: 'transparent',
+                    toolbar: { show: false },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '65%',
+                        borderRadius: 6
+                    }
+                },
+                dataLabels: { enabled: false },
+                colors: ['#6366f1', '#f59e0b'],
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    labels: { colors: '#a0a0b0' }
+                },
+                xaxis: {
+                   categories: categories,
+        labels: {
+            rotate: -45, 
+            rotateAlways: projects.length > 5, 
+            style: { 
+                colors: '#6b6b7b', 
+                fontSize: '11px' 
+            }
+        },
+        axisBorder: { show: false },
+        axisTicks: { show: false }
+                },
+                yaxis: {
+                    max: 100,
+                    labels: {
+                        style: { colors: '#6b6b7b' },
+                        formatter: val => val + '%'
+                    }
+                },
+                grid: {
+                    borderColor: '#2a2a3a',
+                    strokeDashArray: 4
+                },
+                tooltip: {
+                    theme: 'dark',
+                    y: { formatter: val => val + '%' }
+                }
+            };
+            
+            progressChartInstance = new ApexCharts(container, options);
+            progressChartInstance.render();
+        }
+        
+       
+        function updateExpensesChart() {
+            const container = document.getElementById('expensesChart');
+            const projects = projectManager.projects;
+            
+            if (expensesChartInstance) {
+                expensesChartInstance.destroy();
+            }
+            
+            if (projects.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p class="text-muted">Aucune donnée à afficher</p></div>';
+                return;
+            }
+            
+            const labels = projects.map(p => p.name);
+            const series = projects.map(p => p.getBudgetDepense());
+            
+            const isMobile = window.innerWidth < 768;
+
+const options = {
+    series: series,
+    chart: {
+        type: 'donut',
+        height: isMobile ? 350 : 280, 
+        background: 'transparent',
+        fontFamily: 'Inter, sans-serif'
+    },
+    labels: labels,
+    colors: ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'],
+    legend: {
+        position: isMobile ? 'bottom' : 'right', 
+        fontSize: isMobile ? '12px' : '14px',
+        labels: { colors: '#a0a0b0' },
+        markers: { radius: 12 }
+    },
+    plotOptions: {
+        pie: {
+            donut: {
+                size: isMobile ? '75%' : '65%', 
+                labels: {
+                    show: true,
+                    name: { color: '#ffffff' },
+                    value: {
+                        color: '#a0a0b0',
+                        fontSize: isMobile ? '14px' : '16px', // Ajustement police
+                        formatter: val => formatCurrency(parseFloat(val))
+                    },
+                    total: {
+                        show: true,
+                        label: 'Total',
+                        color: '#a0a0b0',
+                        formatter: w => formatCurrency(w.globals.seriesTotals.reduce((a, b) => a + b, 0))
+                    }
+                }
+            }
+        }
+    },
+    stroke: { show: false },
+    tooltip: {
+        theme: 'dark',
+        y: { formatter: val => formatCurrency(val) }
+    }
+};
+            expensesChartInstance = new ApexCharts(container, options);
+            expensesChartInstance.render();
+        }
+        
+       
+        function exportToExcel() {
+            const projects = projectManager.projects;
+            
+            if (projects.length === 0) {
+                showToast('Aucun projet à exporter', 'warning');
+                return;
+            }
+            
+           
+            const data = projects.map(p => ({
+                'Nom du Projet': p.name,
+                'Description': p.description,
+                'Date Début': p.dateDebut,
+                'Date Fin': p.dateFin,
+                'Budget Prévu': p.getBudgetPrevu(),
+                'Budget Dépensé': p.getBudgetDepense(),
+                'Avancement (%)': Math.round(p.getAvancementPondere()),
+                'Temps Écoulé (%)': Math.round(p.getTempsEcoule()),
+                'Santé': p.getHealthStatus().toUpperCase(),
+                'Score Santé (%)': p.getHealthScore(),
+                'Nombre de Tâches': p.tasks.length
+            }));
+            
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Projets');
+            
+            
+            const tasksData = [];
+            projects.forEach(p => {
+                p.tasks.forEach(t => {
+                    tasksData.push({
+                        'Projet': p.name,
+                        'Tâche': t.name,
+                        'Budget Prévu': t.budgetPrevu,
+                        'Budget Dépensé': t.budgetDepense,
+                        'Avancement (%)': t.avancement,
+                        'Valeur Acquise': t.getEarnedValue()
+                    });
+                });
+            });
+            
+            if (tasksData.length > 0) {
+                const wsTasks = XLSX.utils.json_to_sheet(tasksData);
+                XLSX.utils.book_append_sheet(wb, wsTasks, 'Tâches');
+            }
+            
+            
+            const filename = `ORBIT_PRO_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, filename);
+            showToast('Export Excel réussi');
+        }
+        
+       
+        function exportToPDF() {
+            const projects = projectManager.projects;
+            
+            if (projects.length === 0) {
+                showToast('Aucun projet à exporter', 'warning');
+                return;
+            }
+            
+            showToast('Génération du PDF en cours...', 'warning');
+            
+           
+            const pdfContent = document.createElement('div');
+            pdfContent.style.cssText = 'padding: 20px; font-family: Arial, sans-serif; background: white; color: #333;';
+            
+            pdfContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #6366f1; margin: 0;">ORBIT PRO</h1>
+                    <p style="color: #666; margin: 5px 0;">Rapport de Suivi des Projets</p>
+                    <p style="color: #999; font-size: 12px;">Généré le ${new Date().toLocaleDateString('fr-FR', { dateStyle: 'full' })}</p>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 150px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${projects.length}</div>
+                        <div style="color: #666; font-size: 12px;">Projets Actifs</div>
+                    </div>
+                    <div style="flex: 1; min-width: 150px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #22c55e;">${formatCurrency(projectManager.getTotalBudget())}</div>
+                        <div style="color: #666; font-size: 12px;">Budget Total</div>
+                    </div>
+                    <div style="flex: 1; min-width: 150px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #f59e0b;">${formatCurrency(projectManager.getTotalSpent())}</div>
+                        <div style="color: #666; font-size: 12px;">Dépenses Totales</div>
+                    </div>
+                    <div style="flex: 1; min-width: 150px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: ${projectManager.getGlobalHealth() >= 70 ? '#22c55e' : projectManager.getGlobalHealth() >= 50 ? '#f59e0b' : '#ef4444'};">${projectManager.getGlobalHealth()}%</div>
+                        <div style="color: #666; font-size: 12px;">Santé Globale</div>
+                    </div>
+                </div>
+                
+                <h2 style="color: #333; border-bottom: 2px solid #6366f1; padding-bottom: 10px;">Détail des Projets</h2>
+                
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    <thead>
+                        <tr style="background: #6366f1; color: white;">
+                            <th style="padding: 10px; text-align: left;">Projet</th>
+                            <th style="padding: 10px; text-align: center;">Période</th>
+                            <th style="padding: 10px; text-align: right;">Budget</th>
+                            <th style="padding: 10px; text-align: right;">Dépensé</th>
+                            <th style="padding: 10px; text-align: center;">Progrès</th>
+                            <th style="padding: 10px; text-align: center;">Santé</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${projects.map((p, i) => {
+                            const health = p.getHealthStatus();
+                            const healthColors = { sain: '#22c55e', vigilance: '#f59e0b', critique: '#ef4444' };
+                            return `
+                                <tr style="background: ${i % 2 === 0 ? '#f8f9fa' : 'white'};">
+                                    <td style="padding: 10px;">
+                                        <strong>${p.name}</strong>
+                                        ${p.description ? `<br><span style="color: #999; font-size: 10px;">${p.description}</span>` : ''}
+                                    </td>
+                                    <td style="padding: 10px; text-align: center;">${formatDate(p.dateDebut)}<br>→ ${formatDate(p.dateFin)}</td>
+                                    <td style="padding: 10px; text-align: right;">${formatCurrency(p.getBudgetPrevu())}</td>
+                                    <td style="padding: 10px; text-align: right; color: ${p.getBudgetDepense() > p.getBudgetPrevu() ? '#ef4444' : 'inherit'};">${formatCurrency(p.getBudgetDepense())}</td>
+                                    <td style="padding: 10px; text-align: center;">
+                                        ${Math.round(p.getAvancementPondere())}%
+                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 4px;">
+                                            <div style="width: ${Math.min(100, p.getAvancementPondere())}%; height: 100%; background: #6366f1; border-radius: 3px;"></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px; text-align: center;">
+                                        <span style="background: ${healthColors[health]}; color: white; padding: 3px 8px; border-radius: 10px; font-size: 10px;">${health.toUpperCase()}</span>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; color: #999; font-size: 10px;">
+                    <p>Document généré par ORBIT PRO - Application de Pilotage de Projets</p>
+                </div>
+            `;
+            
+           
+            const opt = {
+                margin: 10,
+                filename: `ORBIT_PRO_Rapport_${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(pdfContent).save().then(() => {
+                showToast('Export PDF réussi');
+            });
+        }
+        
+        
+        function changeCurrency(currency) {
+            currentCurrency = currency;
+            localStorage.setItem('orbit_pro_currency', currency);
+            refreshData();
+        }
+
+
+   function resetMagicBar() {
+    const container = document.getElementById('magic-bar-content');
+    container.innerHTML = `
+        <label class="form-label text-primary fw-bold" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+            <i data-lucide="cpu" style="width: 14px; height: 14px; margin-right: 5px;"></i> PLANIFICATION ASSISTÉE (IA)
+        </label>
+        <div class="d-flex gap-2">
+            <input type="text" id="magicInput" class="form-input" placeholder="Ex: Créer un site e-commerce de 2M en 3 mois...">
+            <button type="button" class="btn-orbit btn-primary" onclick="magicCreateProject()" id="magicBtn">
+                <i data-lucide="zap" style="width: 18px; height: 18px;"></i>
+            </button>
+        </div>
+        <p class="mt-2 mb-0" style="font-size: 0.65rem; color: var(--text-muted);">Décrivez votre projet, l'IA configurera les dates, le budget et les tâches.</p>
+    `;
+    lucide.createIcons();
+}
+
+
+function showErrorInMagicBar(message) {
+    const container = document.getElementById('magic-bar-content');
+    container.innerHTML = `
+        <div class="text-danger small fw-bold mb-2">
+            <i data-lucide="alert-circle" style="width: 14px; height: 14px; vertical-align: middle;"></i> ${message}
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn-orbit btn-secondary btn-sm w-100" onclick="resetMagicBar()">Réessayer</button>
+            <button type="button" class="btn-orbit btn-secondary btn-sm w-100" onclick="resetMagicBar()">Annuler</button>
+        </div>
+    `;
+    lucide.createIcons();
+}
+
+
+async function magicCreateProject() {
+    const apiKey = localStorage.getItem('orbit_gemini_key');
+    const inputField = document.getElementById('magicInput');
+    const container = document.getElementById('magic-bar-content');
+    
+    if (!apiKey) {
+        showErrorInMagicBar("Clé API absente. Configurez-la dans les réglages en haut à droite.");
+        return;
+    }
+
+    const userInput = inputField ? inputField.value.trim() : "";
+    if (!userInput) {
+        showToast("Veuillez saisir une description", "warning");
+        return;
+    }
+
+    
+    container.innerHTML = `
+        <div class="d-flex align-items-center justify-content-center gap-3 py-3">
+            <div class="loader"></div>
+            <span class="small fw-bold text-primary">Intelligence artificielle en cours de planification...</span>
+        </div>`;
+
+    const today = new Date().toISOString().split('T')[0];
+    const prompt = `Tu es un expert en gestion de projet. Analyse cette demande : "${userInput}". Aujourd'hui : ${today}.
+    Génère UNIQUEMENT un objet JSON (sans texte avant ni après) :
+    {
+      "nom": "Nom du projet",
+      "description": "Description concise",
+      "dateDebut": "YYYY-MM-DD",
+      "dateFin": "YYYY-MM-DD",
+      "budgetTotal": 1000000,
+      "taches": [
+        {"nom": "Tâche 1", "budget": 500000},
+        {"nom": "Tâche 2", "budget": 500000}
+      ]
+    }`;
+
+    try {
+        
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            let msg = data.error.message;
+            if (msg.includes("API key not valid")) msg = "La clé API Google Gemini est incorrecte ou expirée. <br> Veuillez en renseigner une valide dans les paramètres de configuration (icône d'engrenage).";
+            throw new Error(msg);
+        }
+
+        
+        const aiText = data.candidates[0].content.parts[0].text;
+        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error("L'IA a renvoyé un format illisible. Réessayez.");
+        
+        const result = JSON.parse(jsonMatch[0]);
+
+        
+        resetMagicBar(); 
+        
+        document.getElementById('projectName').value = result.nom || '';
+        document.getElementById('projectDescription').value = result.description || '';
+        document.getElementById('projectStartDate').value = result.dateDebut || today;
+        document.getElementById('projectEndDate').value = result.dateFin || '';
+
+        
+        const tasksList = document.getElementById('tasksList');
+        tasksList.innerHTML = ''; 
+        
+        if (result.taches && result.taches.length > 0) {
+            result.taches.forEach(t => {
+                addTaskToDOM(t.nom, t.budget, 0, 0);
+            });
+            document.getElementById('manualInputs').style.display = 'none';
+            document.getElementById('emptyTasks').style.display = 'none';
+        } else {
+            document.getElementById('manualInputs').style.display = 'block';
+            document.getElementById('manualBudget').value = result.budgetTotal || 0;
+        }
+
+        showToast("Planification générée avec succès !", "success");
+
+    } catch (error) {
+        console.error(error);
+        showErrorInMagicBar(error.message);
+    }
+}     
+    function resetAIView() {
+    const aiContainer = document.getElementById('ai-content');
+    aiContainer.innerHTML = `
+        <p class="text-secondary small mb-3">Analyse stratégique de votre portefeuille de projets via Google Gemini.</p>
+        <button class="btn-orbit btn-primary btn-sm" onclick="generateAIAnalysis()">
+            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+            <span>Générer l'audit de risque</span>
+        </button>
+    `;
+    lucide.createIcons();
+}
+
+function saveApiKey() {
+    const key = document.getElementById('gemini_api_key').value.trim();
+    if (key) {
+        localStorage.setItem('orbit_gemini_key', key);
+        showToast("Clé API enregistrée avec succès !");
+        closeSettings();
+        resetAIView(); 
+    } else {
+        showToast("Veuillez entrer une clé valide", "warning");
+    }
+}
+        function openSettings() {
+    document.getElementById('gemini_api_key').value = localStorage.getItem('orbit_gemini_key') || '';
+    document.getElementById('settingsModal').classList.add('active');
+    document.body.classList.add('modal-open');
+}
+
+function closeSettings() {
+    document.getElementById('settingsModal').classList.remove('active');
+    document.body.classList.remove('modal-open');
+}
+async function generateAIAnalysis() {
+    const apiKey = localStorage.getItem('orbit_gemini_key');
+    
+    if (!apiKey) {
+        showToast("Veuillez configurer votre clé API d'abord.", "danger");
+        openSettings();
+        return;
+    }
+
+    const aiContainer = document.getElementById('ai-content');
+
+       aiContainer.innerHTML = `
+        <div class="d-flex align-items-center gap-2 py-3">
+            <div class="loader"></div>
+            <span class="small fw-bold">Orbit AI analyse vos projets...</span>
+        </div>`;
+
+    
+
+    
+    const projectData = projectManager.projects.map(p => {
+        return {
+            nom: p.name,
+            budget_total: p.getBudgetPrevu(),
+            depense_actuelle: p.getBudgetDepense(),
+            progres_reel: Math.round(p.getAvancementPondere()) + '%',
+            temps_ecoule: Math.round(p.getTempsEcoule()) + '%',
+            sante: p.getHealthStatus()
+        };
+    });
+
+     if (projectData.length === 0) {
+        aiContainer.innerHTML = `<p class="text-muted small">Ajoutez des projets pour obtenir une analyse.</p>`;
+        return;
+    }
+
+
+    
+    const prompt = `En tant qu'expert en gestion de projet, analyse ces données JSON : ${JSON.stringify(projectData)}. 
+    Donne-moi un audit de risque narratif très court (max 3-4 phrases). 
+    Identifie le projet le plus critique, explique pourquoi et donne une solution concrète. 
+    Sois direct, professionnel et utilise un ton de professionnel en gestion de projets. Réponds en Français.`;
+
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }]
+            })
+        });
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
+
+       
+let aiRawText = data.candidates[0].content.parts[0].text;
+
+
+let formattedText = aiRawText
+    .replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--text-primary);">$1</strong>') 
+    .replace(/\* /g, '• ') 
+    .trim();
+
+
+aiContainer.innerHTML = `
+            <div class="ai-response small lh-base mb-3" style="white-space: pre-line; color: var(--text-secondary);">
+                ${formattedText}
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn-orbit btn-secondary btn-sm" onclick="generateAIAnalysis()">
+                    <i data-lucide="refresh-cw" style="width: 12px; height: 12px;"></i>
+                    <span>Actualiser</span>
+                </button>
+                <button class="btn-orbit btn-secondary btn-sm" onclick="resetAIView()">
+                    <i data-lucide="x" style="width: 12px; height: 12px;"></i>
+                    <span>Fermer</span>
+                </button>
+            </div>
+        `;
+        lucide.createIcons();
+
+    } catch (error) {
+        
+        aiContainer.innerHTML = `
+            <div class="form-warning mb-2" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+                <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i>
+                <span style="font-size: 0.75rem;">${error.message.includes("API key") ? "Clé API Invalide. Veuillez insérer une clé valide au niveau des paramètres de configuration." : error.message}</span>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn-orbit btn-primary btn-sm" onclick="generateAIAnalysis()">Réessayer</button>
+                <button class="btn-orbit btn-secondary btn-sm" onclick="resetAIView()">Annuler</button>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+}
+
+
+        function initApp() {
+           
+            const savedCurrency = localStorage.getItem('orbit_pro_currency');
+            if (savedCurrency && CURRENCY_CONFIG[savedCurrency]) {
+                currentCurrency = savedCurrency;
+                document.getElementById('currencySelector').value = savedCurrency;
+            }
+            
+           
+            document.getElementById('currencySelector').addEventListener('change', (e) => {
+                changeCurrency(e.target.value);
+            });
+            
+          
+            document.getElementById('projectEndDate').addEventListener('change', function() {
+                const startDate = document.getElementById('projectStartDate').value;
+                const endDate = this.value;
+                
+                if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
+                    document.getElementById('dateError').style.display = 'block';
+                    this.classList.add('is-invalid');
+                } else {
+                    document.getElementById('dateError').style.display = 'none';
+                    this.classList.remove('is-invalid');
+                }
+            });
+            
+            
+            document.getElementById('projectModal').addEventListener('click', (e) => {
+                if (e.target.id === 'projectModal') {
+                    closeProjectModal();
+                }
+            });
+            
+          
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeProjectModal();
+                }
+            });
+            
+          
+            lucide.createIcons();
+            
+            
+            refreshData();
+            
+            console.log('ORBIT PRO initialisé avec succès');
+        }
+        
+      
+        document.addEventListener('DOMContentLoaded', initApp);
+
+
+    </script>
+
+<div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header" style="border-bottom: none;">
+            <h2 class="modal-title">Confirmer la suppression</h2>
+            <button class="modal-close" onclick="closeDeleteModal()">
+                <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+            </button>
+        </div>
+        <div class="modal-body text-center" style="padding-top: 0;">
+            <div class="kpi-icon danger" style="margin: 0 auto 1.5rem; width: 60px; height: 60px;">
+                <i data-lucide="trash-2" style="width: 30px; height: 30px;"></i>
+            </div>
+            <p id="deleteConfirmText" style="color: var(--text-secondary);">Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.</p>
+        </div>
+        <div class="modal-footer" style="border-top: none; background: transparent; justify-content: center; padding-bottom: 2rem;">
+            <button class="btn-orbit btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+            <button class="btn-orbit btn-danger" id="confirmDeleteBtn">Supprimer définitivement</button>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+            <h2 class="modal-title">Configuration Orbit AI</h2>
+            <button class="modal-close" onclick="closeSettings()">
+                <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Clé API Google Gemini</label>
+                <input type="password" id="gemini_api_key" class="form-input" placeholder="Entrez votre clé API...">
+                <p class="mt-2" style="font-size: 0.75rem; color: var(--text-muted);">
+                    Vous n'avez pas de clé ? Obtenez-en une gratuitement sur <a href="https://aistudio.google.com/" target="_blank" class="text-primary">Google AI Studio</a>.
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-orbit btn-secondary" onclick="closeSettings()">Annuler</button>
+            <button class="btn-orbit btn-primary" onclick="saveApiKey()">Enregistrer la clé</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
