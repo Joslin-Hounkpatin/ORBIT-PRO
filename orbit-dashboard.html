@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ORBIT PRO - Project Intelligence Engine. Gérez vos tâches par glisser-déposer avec pilotage financier EVM et intelligence artificielle intégrée." />
+    <meta name="author" content="Joslin Hounkpatin" />
 
     <link rel="icon" type="image/png" href="favicon orbit.png">
 
-    <title>ORBIT PRO - Pilotage de Projets</title>
+    <title>ORBIT PRO - Dashboard | Project Intelligence Engine</title>
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,14 +31,17 @@
 
     <style>
         :root {
-            --bg-primary: #0a0a0f;
+            --bg-primary: #0f1117;
             --bg-secondary: #12121a;
             --bg-card: #1a1a24;
             --bg-card-hover: #22222e;
+            --border: rgba(255, 255, 255, 0.08);
             --border-color: #2a2a3a;
             --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #6b6b7b;
+            --text-secondary: #8b91b0;
+            --text-muted: #555a7a;
+            --accent: #6366f1;
+            --accent-hover: #4f52d4;
             --accent-primary: #6366f1;
             --accent-primary-hover: #818cf8;
             --success: #22c55e;
@@ -62,7 +68,8 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
@@ -94,23 +101,75 @@
 
 
         .navbar-orbit {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0.75rem 1.5rem;
+            background: #1a1d27;
+            /* Couleur Surface du Kanban */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0 1.5rem;
+            height: 60px;
+            /* Taille exacte du Kanban */
+            display: flex;
+            align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-
+            align-items: center;
+            justify-content: space-between;
         }
 
         .navbar-brand {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #f0f2ff !important;
+            letter-spacing: -0.02em;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--text-primary) !important;
+            gap: 8px;
             text-decoration: none;
+            margin-right: 2rem;
+        }
+
+        .nav-tabs-orbit {
+            display: flex;
+            gap: 4px;
+            margin-right: auto;
+            margin-right: -20rem;
+            /* Pousse les contrôles vers la droite */
+        }
+
+        .nav-tab-orbit {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #8b91b0;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .nav-tab-orbit:hover {
+            background: #22263a;
+            color: #f0f2ff;
+        }
+
+        .nav-tab-orbit.active {
+            background: rgba(99, 102, 241, 0.12);
+            color: #6366f1;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+        }
+
+        .navbar-controls .btn-primary {
+            padding: 0.4rem 0.7rem !important;
+            font-size: 0.78rem !important;
+        }
+
+        .desktop-only {
+            display: flex !important;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .logo-icon {
@@ -126,8 +185,46 @@
         .navbar-controls {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 0.75rem !important;
         }
+
+
+        .nav-brand {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #f0f2ff !important;
+            /* Couleur texte Kanban */
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-brand .orbit-text {
+            color: #6366f1;
+            /* La couleur violette spécifique */
+        }
+
+        .nav-logo {
+            width: 28px;
+            height: 28px;
+            background: #6366f1;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* On s'assure que le SVG interne est bien blanc et petit */
+        .nav-logo svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+
 
         .btn-export {
             padding: 0.35rem 0.7rem !important;
@@ -181,6 +278,7 @@
             font-size: 1.4rem;
             font-weight: 700;
             margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
         }
 
         .page-subtitle {
@@ -404,7 +502,7 @@
         .projects-table td {
             padding: 1rem;
             border-bottom: 1px solid var(--border-color);
-            font-size: 0.875rem;
+            font-size: 0.85rem;
         }
 
         .projects-table tbody tr {
@@ -428,7 +526,7 @@
         }
 
         .project-description {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             margin-top: 0.25rem;
         }
@@ -504,13 +602,15 @@
 
 
         .btn-orbit {
+
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             padding: 0.625rem 1rem;
             border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-size: 0.82rem !important;
+            /* Calqué sur le bouton du Kanban */
+            font-weight: 600 !important;
             cursor: pointer;
             transition: all 0.2s ease;
             border: none;
@@ -1194,45 +1294,364 @@
         .modal-content {
             overflow-x: hidden !important;
         }
+
+
+
+        .nav-tabs-desktop {
+            display: flex;
+            gap: 8px;
+            margin-left: 2rem;
+        }
+
+        .btn-burger {
+            display: none;
+
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            /* Caché à droite */
+            width: 300px;
+            height: 100vh;
+            background: var(--bg-card);
+            z-index: 3000;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-drawer.active {
+            transform: translateX(-300px);
+
+        }
+
+        .nav-drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        .drawer-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .drawer-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+        }
+
+        .drawer-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .drawer-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .drawer-link:hover,
+        .drawer-link.active {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+        }
+
+        .drawer-divider {
+            margin: 1.5rem 0;
+            border-color: var(--border-color);
+            opacity: 0.5;
+        }
+
+        .drawer-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .drawer-section {
+            margin-bottom: 1.5rem;
+        }
+
+
+        @media (max-width: 992px) {
+
+            .nav-tabs-desktop,
+            .navbar-controls-desktop .btn-export,
+            .navbar-controls-desktop .currency-selector {
+                display: none !important;
+
+            }
+
+            .btn-burger {
+                display: block;
+
+            }
+
+            .navbar-controls-desktop {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-text {
+                display: none;
+
+            }
+        }
+
+
+        @media (max-width: 576px) {
+            .task-item {
+                padding: 12px !important;
+            }
+
+
+            .task-item-header {
+                flex-wrap: wrap;
+                gap: 8px !important;
+            }
+
+            .task-name-input {
+                flex: 1 1 100% !important;
+
+                order: 1;
+            }
+
+            [data-field="assignee"] {
+                flex: 1 !important;
+
+                order: 2;
+            }
+
+            .btn-danger.btn-icon {
+                order: 3;
+            }
+
+
+            .task-fields {
+                grid-template-columns: 1fr !important;
+                /* Une seule colonne au lieu de 3 */
+                gap: 12px !important;
+            }
+
+            /* Les étiquettes (labels) */
+            .task-field label {
+                font-size: 0.75rem !important;
+                margin-bottom: 4px !important;
+            }
+
+            /* Statut et Priorité passent aussi l'un sous l'autre */
+            .task-status-priority {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+        }
+
+        @media (max-width: 1100px) {
+
+            /* Cache les éléments superflus sur tablette et mobile */
+            .desktop-only {
+                display: none !important;
+            }
+
+            .btn-burger {
+                display: block;
+                /* Affiche le burger */
+            }
+
+            /* Optionnel : raccourcir le texte du bouton nouveau sur petit écran */
+            .btn-text-project {
+                font-size: 0;
+            }
+
+            .btn-text-project::before {
+                content: "Nouveau";
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-text-project {
+                display: none;
+                /* Ne garde que le "+" sur mobile très étroit */
+            }
+
+            .navbar-orbit {
+                padding: 0 0.8rem;
+            }
+        }
+
+        .footer-credit {
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
+        }
+
+        .footer-credit strong {
+            color: var(--text-secondary);
+        }
+
+        .footer-credit a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .footer-credit a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
     </style>
 </head>
 
 <body>
 
 
+    <!-- Navbar optimisée -->
     <nav class="navbar-orbit">
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <a href="#" class="navbar-brand">
-                <div class="logo-icon">
-                    <i data-lucide="orbit" style="width: 20px; height: 20px; color: white;"></i>
-                </div>
-                <span>ORBIT PRO</span>
-            </a>
+        <!-- Logo -->
+        <a href="#" class="nav-brand">
+            <div class="nav-logo">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="white" stroke-width="2" />
+                    <line x1="12" y1="3" x2="12" y2="0" stroke="white" stroke-width="2" />
+                </svg>
+            </div>
+            <span class="orbit-text">ORBIT</span>PRO
+        </a>
 
-            <div class="navbar-controls">
-                <select id="currencySelector" class="currency-selector">
+
+        <div class="nav-tabs-orbit desktop-only">
+            <button class="nav-tab-orbit active">Dashboard</button>
+            <a href="orbit-kanban.html" class="nav-tab-orbit">Kanban</a>
+        </div>
+
+
+        <div class="navbar-controls">
+
+            <button class="btn-orbit btn-secondary btn-export desktop-only" onclick="exportToExcel()"
+                title="Exporter en Excel">
+                <i class="bi bi-file-earmark-spreadsheet-fill" style="color: #1d6f42;"></i>
+                <span class="btn-text">Excel</span>
+            </button>
+
+            <button class="btn-orbit btn-secondary btn-export desktop-only" onclick="exportToPDF()"
+                title="Exporter en PDF">
+                <i class="bi bi-file-earmark-pdf-fill" style="color: #e11d48;"></i>
+                <span class="btn-text">PDF</span>
+            </button>
+
+
+            <select id="currencySelector" class="currency-selector desktop-only">
+                <option value="XOF">XOF (FCFA)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="USD">USD ($)</option>
+            </select>
+
+
+            <button class="btn-orbit btn-primary" onclick="openProjectModal()">
+                <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+                <span class="btn-text-project">Nouveau Projet</span>
+            </button>
+
+
+            <button class="btn-burger" onclick="toggleDrawer(true)">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="nav-drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+    <div class="nav-drawer" id="navDrawer">
+        <div class="drawer-header">
+            <span class="drawer-title">MENU</span>
+            <button class="modal-close" onclick="toggleDrawer(false)">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="drawer-body">
+            <div class="drawer-links">
+                <a href="#" class="drawer-link active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+                <a href="orbit-kanban.html" class="drawer-link"><i class="bi bi-trello"></i> Kanban</a>
+            </div>
+
+            <hr class="drawer-divider">
+
+            <div class="drawer-section">
+                <label class="drawer-label">Devise </label>
+                <select id="currencySelectorMobile" class="form-input">
                     <option value="XOF">XOF (FCFA)</option>
                     <option value="EUR">EUR (€)</option>
                     <option value="USD">USD ($)</option>
                 </select>
+            </div>
 
-                <button class="btn-orbit btn-secondary btn-export" onclick="exportToExcel()" title="Exporter en Excel">
-                    <i class="bi bi-file-earmark-spreadsheet-fill" style="color: #1d6f42; font-size: 1.1rem;"></i>
-                    <span class="btn-text">Excel</span>
-                </button>
-
-                <!-- Bouton PDF -->
-                <button class="btn-orbit btn-secondary btn-export" onclick="exportToPDF()" title="Exporter en PDF">
-                    <i class="bi bi-file-earmark-pdf-fill" style="color: #e11d48; font-size: 1.1rem;"></i>
-                    <span class="btn-text">PDF</span>
-                </button>
-                <button class="btn-orbit btn-primary" onclick="openProjectModal()">
-                    <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
-                    <span class="btn-text">Nouveau Projet</span>
-                </button>
+            <div class="drawer-section">
+                <label class="drawer-label">Actions de rapport</label>
+                <div class="d-grid gap-2">
+                    <button class="btn-orbit btn-secondary w-100 justify-content-start"
+                        onclick="exportToExcel(); toggleDrawer(false)">
+                        <i class="bi bi-file-earmark-spreadsheet-fill text-success"></i> Export Excel
+                    </button>
+                    <button class="btn-orbit btn-secondary w-100 justify-content-start"
+                        onclick="exportToPDF(); toggleDrawer(false)">
+                        <i class="bi bi-file-earmark-pdf-fill text-danger"></i> Export PDF
+                    </button>
+                </div>
             </div>
         </div>
-    </nav>
+    </div>
 
 
     <main class="main-container" id="mainContent">
@@ -1250,7 +1669,7 @@
                     <div class="kpi-icon primary">
                         <i data-lucide="folder-kanban" style="width: 20px; height: 20px;"></i>
                     </div>
-                    
+
                 </div>
                 <div class="kpi-value" id="activeProjectsCount">0</div>
                 <div class="kpi-label">Projets Actifs</div>
@@ -1377,7 +1796,7 @@
                 <h3 class="empty-title">Aucun projet</h3>
                 <p class="empty-description">Créez votre premier projet pour commencer le suivi</p>
                 <button class="btn-orbit btn-primary" onclick="openProjectModal()">
-                    <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="plus" style="width: 13px; height: 13px;"></i>
                     <span>Créer un projet</span>
                 </button>
             </div>
@@ -1507,7 +1926,21 @@
     </div>
 
 
+    <footer class="footer-credit">
+        <p>
+            &copy; <span>2026</span> <strong>ORBIT PRO</strong>. Tous droits réservés.
+            <br>
+            Développé avec passion par <a href="https://joslin-hounkpatin.github.io/portfolio-joslin" target="_blank"
+                rel="noopener noreferrer">Joslin Hounkpatin</a>
+        </p>
+        </p>
+    </footer>
+
+
+
     <div class="toast-container" id="toastContainer"></div>
+
+
 
 
     <script>
@@ -1517,6 +1950,17 @@
             EUR: { symbol: '€', rate: 0.00152, decimals: 2 },
             USD: { symbol: '$', rate: 0.00166, decimals: 2 }
         };
+
+        function toBase(amount) {
+            if (isNaN(amount)) return 0;
+            return amount / CURRENCY_CONFIG[currentCurrency].rate;
+        }
+
+
+        function fromBase(amount) {
+            if (isNaN(amount)) return 0;
+            return amount * CURRENCY_CONFIG[currentCurrency].rate;
+        }
 
 
         let currentCurrency = 'XOF';
@@ -1529,12 +1973,17 @@
 
 
         class Task {
-            constructor(name = '', budgetPrevu = 0, budgetDepense = 0, avancement = 0) {
+            constructor(name = '', budgetPrevu = 0, budgetDepense = 0, avancement = 0, status = 'todo', priority = 'medium', assignee = '', description = '') {
                 this.id = Date.now() + Math.random().toString(36).substr(2, 9);
                 this.name = name;
                 this.budgetPrevu = Math.max(0, budgetPrevu);
                 this.budgetDepense = Math.max(0, budgetDepense);
                 this.avancement = Math.min(100, Math.max(0, avancement));
+
+                this.status = status;
+                this.priority = priority;
+                this.assignee = assignee;
+                this.description = description;
             }
 
 
@@ -1551,8 +2000,17 @@
                 this.description = description || '';
                 this.dateDebut = dateDebut;
                 this.dateFin = dateFin;
-                this.tasks = tasks.map(t => new Task(t.name, t.budgetPrevu, t.budgetDepense, t.avancement));
 
+                this.tasks = tasks.map(t => new Task(
+                    t.name,
+                    t.budgetPrevu,
+                    t.budgetDepense,
+                    t.avancement,
+                    t.status || 'todo',
+                    t.priority || 'medium',
+                    t.assignee || '',
+                    t.description || ''
+                ));
 
                 this.manualBudget = 0;
                 this.manualSpent = 0;
@@ -1849,14 +2307,21 @@
 
                     if (project.tasks.length > 0) {
                         project.tasks.forEach(task => {
-                            addTaskToDOM(task.name, task.budgetPrevu, task.budgetDepense, task.avancement);
+                            addTaskToDOM(task.name,
+                                fromBase(task.budgetPrevu),
+                                fromBase(task.budgetDepense),
+                                task.avancement,
+                                task.status,
+                                task.priority,
+                                task.assignee);
                         });
                     } else {
 
                         document.getElementById('manualInputs').style.display = 'block';
                         document.getElementById('noTasksWarning').style.display = 'flex';
-                        document.getElementById('manualBudget').value = project.manualBudget;
-                        document.getElementById('manualSpent').value = project.manualSpent;
+                        const decimals = CURRENCY_CONFIG[currentCurrency].decimals;
+                        document.getElementById('manualBudget').value = fromBase(project.manualBudget).toFixed(decimals);
+                        document.getElementById('manualSpent').value = fromBase(project.manualSpent).toFixed(decimals);
                         document.getElementById('manualProgress').value = project.manualProgress;
                     }
                 }
@@ -1873,6 +2338,32 @@
             modal.classList.add('active');
             lucide.createIcons();
         }
+
+        function toggleDrawer(open) {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+
+            if (open) {
+                drawer.classList.add('active');
+                overlay.classList.add('active');
+                document.body.classList.add('modal-open');
+            } else {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+
+        function syncCurrencySelectors(value) {
+            const mobileSelector = document.getElementById('currencySelectorMobile');
+            const desktopSelector = document.getElementById('currencySelector');
+            if (mobileSelector) mobileSelector.value = value;
+            if (desktopSelector) desktopSelector.value = value;
+        }
+
+
+
 
 
         function closeProjectModal() {
@@ -1904,12 +2395,18 @@
 
             taskElements.forEach(taskEl => {
                 const taskName = taskEl.querySelector('[data-field="name"]').value.trim();
-                const budgetPrevu = parseFloat(taskEl.querySelector('[data-field="budgetPrevu"]').value) || 0;
-                const budgetDepense = parseFloat(taskEl.querySelector('[data-field="budgetDepense"]').value) || 0;
+
+                const budgetPrevu = toBase(parseFloat(taskEl.querySelector('[data-field="budgetPrevu"]').value)) || 0;
+                const budgetDepense = toBase(parseFloat(taskEl.querySelector('[data-field="budgetDepense"]').value)) || 0;
+
                 const avancement = parseFloat(taskEl.querySelector('[data-field="avancement"]').value) || 0;
 
+                const status = taskEl.querySelector('[data-field="status"]').value;
+                const priority = taskEl.querySelector('[data-field="priority"]').value;
+                const assignee = taskEl.querySelector('[data-field="assignee"]').value.trim();
+
                 if (taskName) {
-                    tasks.push({ name: taskName, budgetPrevu, budgetDepense, avancement });
+                    tasks.push(new Task(taskName, budgetPrevu, budgetDepense, avancement, status, priority, assignee));
                 }
             });
 
@@ -1920,16 +2417,15 @@
                     description,
                     dateDebut,
                     dateFin,
-                    tasks: tasks.map(t => new Task(t.name, t.budgetPrevu, t.budgetDepense, t.avancement))
+                    tasks: tasks.map(t => new Task(t.name, t.budgetPrevu, t.budgetDepense, t.avancement, t.status, t.priority, t.assignee, t.description))
                 };
 
 
                 if (tasks.length === 0) {
-                    updateData.manualBudget = parseFloat(document.getElementById('manualBudget').value) || 0;
-                    updateData.manualSpent = parseFloat(document.getElementById('manualSpent').value) || 0;
+                    updateData.manualBudget = toBase(parseFloat(document.getElementById('manualBudget').value)) || 0;
+                    updateData.manualSpent = toBase(parseFloat(document.getElementById('manualSpent').value)) || 0;
                     updateData.manualProgress = parseFloat(document.getElementById('manualProgress').value) || 0;
                 }
-
                 projectManager.updateProject(editingProjectId, updateData);
                 showToast('Projet mis à jour avec succès');
             } else {
@@ -1937,8 +2433,8 @@
                 const project = new Project(name, description, dateDebut, dateFin, tasks);
 
                 if (tasks.length === 0) {
-                    project.manualBudget = parseFloat(document.getElementById('manualBudget').value) || 0;
-                    project.manualSpent = parseFloat(document.getElementById('manualSpent').value) || 0;
+                    project.manualBudget = toBase(parseFloat(document.getElementById('manualBudget').value)) || 0;
+                    project.manualSpent = toBase(parseFloat(document.getElementById('manualSpent').value)) || 0;
                     project.manualProgress = parseFloat(document.getElementById('manualProgress').value) || 0;
                 }
 
@@ -1956,7 +2452,7 @@
         }
 
 
-        function addTaskToDOM(name = '', budgetPrevu = 0, budgetDepense = 0, avancement = 0) {
+        function addTaskToDOM(name = '', budgetPrevu = 0, budgetDepense = 0, avancement = 0, status = 'todo', priority = 'medium', assignee = '') {
             const tasksList = document.getElementById('tasksList');
             const emptyTasks = document.getElementById('emptyTasks');
             const noTasksWarning = document.getElementById('noTasksWarning');
@@ -1969,33 +2465,53 @@
             const taskId = Date.now() + Math.random().toString(36).substr(2, 9);
 
             const taskHtml = `
-                <div class="task-item" data-task-id="${taskId}">
-                    <div class="task-item-header">
-                        <input type="text" class="form-input task-name-input" data-field="name" 
-                               placeholder="Nom de la tâche" value="${name}" required>
-                        <button type="button" class="btn-orbit btn-danger btn-icon btn-sm" onclick="removeTask('${taskId}')">
-                            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                        </button>
-                    </div>
-                    <div class="task-fields">
-                        <div class="task-field">
-                            <label>Budget prévu</label>
-                            <input type="number" data-field="budgetPrevu" min="0" step="0.01" 
-                                   value="${budgetPrevu}" placeholder="0" oninput="validateInput(this)">
-                        </div>
-                        <div class="task-field">
-                            <label>Budget dépensé</label>
-                            <input type="number" data-field="budgetDepense" min="0" step="0.01" 
-                                   value="${budgetDepense}" placeholder="0" oninput="validateInput(this)">
-                        </div>
-                        <div class="task-field">
-                            <label>Avancement (%)</label>
-                            <input type="number" data-field="avancement" data-type="progress" min="0" max="100" step="1" 
-                                   value="${avancement}" placeholder="0" oninput="validateInput(this)">
-                        </div>
-                    </div>
+        <div class="task-item" data-task-id="${taskId}" style="border-left: 4px solid ${priority === 'high' ? 'var(--danger)' : 'var(--accent-primary)'}; margin-bottom: 15px; padding: 15px; background: var(--bg-secondary); border-radius: 8px;">
+            <div class="task-item-header" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="text" class="form-input task-name-input" data-field="name" 
+                       placeholder="Nom de la tâche" value="${name}" required style="flex: 1;">
+                <input type="text" class="form-input" data-field="assignee" 
+                       placeholder="Initiales( ex: AB)" value="${assignee}" maxlength="3" style="flex: 0.5;">
+                <button type="button" class="btn-orbit btn-danger btn-icon btn-sm" onclick="removeTask('${taskId}')">
+                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+            </div>
+            
+            <div class="task-fields" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="task-field">
+                    <label style="font-size: 0.7rem; color: var(--text-muted);">Budget Prévu</label>
+                    <input type="number" data-field="budgetPrevu" value="${budgetPrevu}" oninput="validateInput(this)">
                 </div>
-            `;
+                <div class="task-field">
+                    <label style="font-size: 0.7rem; color: var(--text-muted);">Budget Dépensé</label>
+                    <input type="number" data-field="budgetDepense" value="${budgetDepense}" oninput="validateInput(this)">
+                </div>
+                <div class="task-field">
+                    <label style="font-size: 0.7rem; color: var(--text-muted);">Avancement %</label>
+                    <input type="number" data-field="avancement" value="${avancement}" max="100" oninput="validateInput(this)">
+                </div>
+            </div>
+
+            <div class="task-status-priority" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="task-field">
+                    <label style="font-size: 0.7rem; color: var(--text-muted);">Statut Kanban</label>
+                    <select data-field="status" class="form-input" style="padding: 4px 8px; height: auto; font-size: 0.8rem;">
+                        <option value="todo" ${status === 'todo' ? 'selected' : ''}>À faire</option>
+                        <option value="doing" ${status === 'doing' ? 'selected' : ''}>En cours</option>
+                        <option value="review" ${status === 'review' ? 'selected' : ''}>Révision</option>
+                        <option value="done" ${status === 'done' ? 'selected' : ''}>Terminé</option>
+                    </select>
+                </div>
+                <div class="task-field">
+                    <label style="font-size: 0.7rem; color: var(--text-muted);">Priorité</label>
+                    <select data-field="priority" class="form-input" style="padding: 4px 8px; height: auto; font-size: 0.8rem;">
+                        <option value="low" ${priority === 'low' ? 'selected' : ''}>Basse</option>
+                        <option value="medium" ${priority === 'medium' ? 'selected' : ''}>Moyenne</option>
+                        <option value="high" ${priority === 'high' ? 'selected' : ''}>Haute</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    `;
 
             tasksList.insertAdjacentHTML('beforeend', taskHtml);
             lucide.createIcons();
@@ -2121,10 +2637,16 @@
             </td>
             <td data-label="Actions">
                 <div style="display: flex; gap: 0.375rem;">
-                    <button class="btn-orbit btn-secondary btn-icon btn-sm" onclick="openProjectModal('${project.id}')">
+
+                     <a href="orbit-kanban.html?projectId=${project.id}" class="btn-orbit btn-secondary btn-icon btn-sm" title="Vue Kanban">
+            <i class="bi bi-trello" style="width: 14px; height: 14px;"></i>
+        </a>
+
+
+                    <button class="btn-orbit btn-secondary btn-icon btn-sm" onclick="openProjectModal('${project.id}')" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </button>
-                    <button class="btn-orbit btn-danger btn-icon btn-sm" onclick="confirmDeleteProject('${project.id}')">
+                    <button class="btn-orbit btn-danger btn-icon btn-sm" onclick="confirmDeleteProject('${project.id}')" title="Supprimer">
                         <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
                     </button>
                 </div>
@@ -2486,9 +3008,15 @@
         function changeCurrency(currency) {
             currentCurrency = currency;
             localStorage.setItem('orbit_pro_currency', currency);
+
+            // Synchronise visuellement les deux sélecteurs (Desktop et Mobile)
+            const mobileSelector = document.getElementById('currencySelectorMobile');
+            const desktopSelector = document.getElementById('currencySelector');
+            if (mobileSelector) mobileSelector.value = currency;
+            if (desktopSelector) desktopSelector.value = currency;
+
             refreshData();
         }
-
 
         function resetMagicBar() {
             const container = document.getElementById('magic-bar-content');
@@ -2755,18 +3283,27 @@
 
 
         function initApp() {
-
+            // Charger la devise sauvegardée
             const savedCurrency = localStorage.getItem('orbit_pro_currency');
             if (savedCurrency && CURRENCY_CONFIG[savedCurrency]) {
                 currentCurrency = savedCurrency;
-                document.getElementById('currencySelector').value = savedCurrency;
             }
 
+            // Initialiser les deux sélecteurs visuellement
+            const desktopSelector = document.getElementById('currencySelector');
+            const mobileSelector = document.getElementById('currencySelectorMobile');
 
-            document.getElementById('currencySelector').addEventListener('change', (e) => {
-                changeCurrency(e.target.value);
-            });
-
+            if (desktopSelector) {
+                desktopSelector.value = currentCurrency;
+                desktopSelector.addEventListener('change', (e) => changeCurrency(e.target.value));
+            }
+            if (mobileSelector) {
+                mobileSelector.value = currentCurrency;
+                mobileSelector.addEventListener('change', (e) => {
+                    changeCurrency(e.target.value);
+                    toggleDrawer(false); // Ferme le menu après le choix sur mobile
+                });
+            }
 
             document.getElementById('projectEndDate').addEventListener('change', function () {
                 const startDate = document.getElementById('projectStartDate').value;

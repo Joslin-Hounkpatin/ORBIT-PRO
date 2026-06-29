@@ -42,8 +42,22 @@ Le plus grand risque d'un projet est de consommer son budget plus vite que le te
 * **Mode Granulaire** (Tâches) : Bascule automatique vers un moteur de calcul mathématique dès l'ajout de tâches (Σ budgets, Σ dépenses).
 
 
+###### 3. **Tableau Kanban Interactif**
 
-###### 3\.  **Algorithme de Score de Santé (EVM Logic)**
+* **Glisser-Déposer Natif** : Déplacez vos tâches entre les colonnes (À faire → En cours → En révision → Terminé) par simple drag & drop.
+
+* **Synchronisation Bidirectionnelle** : Toute modification dans le Kanban (statut, avancement) se répercute instantanément sur le Dashboard et vice-versa — une seule source de vérité via le localStorage.
+
+* **Mise à jour automatique de l'avancement** : Le passage d'une tâche en colonne "Terminé" met automatiquement son avancement à 100%, recalculant en temps réel la barre de progression globale du projet.
+
+* **Filtres Intelligents** : Filtrez vos tâches par projet, par priorité (Urgente / Moyenne / Basse) ou par recherche textuelle instantanée.
+
+* **Détection des Retards** : Les tâches dont la date limite est dépassée sont signalées visuellement en rouge directement sur la carte.
+
+* **Responsive Mobile** : Navigation par swipe horizontal sur mobile — chaque colonne occupe l'écran comme sur Trello, avec snap natif entre les colonnes.
+
+
+###### 4\.  **Algorithme de Score de Santé (EVM Logic)**
 
 
 
@@ -56,7 +70,7 @@ Calcul dynamique du statut (**Sain, Vigilance, Critique**) basé sur la méthode
 
 
 
-###### 4\.  **Visualisation \& Reporting**
+###### 5\.  **Visualisation \& Reporting**
 
 
 
@@ -64,6 +78,14 @@ Calcul dynamique du statut (**Sain, Vigilance, Critique**) basé sur la méthode
 * **Performance Chart** : Graphiques ApexCharts comparant les courbes de progression vs temps.
 * **Export Professionnel** : Génération de rapports Excel (Data) et PDF Haute Définition (Présentation client).
 
+
+
+
+##### &#x20;**Comment ça marche en 3 étapes**
+
+1. Créez un projet dans le Dashboard
+2. Ajoutez vos tâches avec budget et responsable
+3. Pilotez l'avancement depuis le Kanban — tout se synchronise automatiquement
 
 
 ##### &#x20;**Stack Technique**
