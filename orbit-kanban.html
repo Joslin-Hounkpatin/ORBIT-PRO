@@ -9,7 +9,7 @@
   <meta name="author" content="Joslin Hounkpatin" />
 
   <link rel="icon" type="image/png" href="favicon orbit.png">
-
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <title>ORBIT PRO - Kanban | Project Intelligence Engine</title>
   <style>
     :root {
@@ -668,6 +668,13 @@
       min-height: 60px;
     }
 
+.drag-ghost {
+  opacity: 0.4;
+  background: var(--accent-light) !important;
+  border: 2px dashed var(--accent) !important;
+}
+
+
     .card-priority {
       display: inline-flex;
       align-items: center;
@@ -1173,8 +1180,7 @@
   <!-- BOARD -->
   <div class="board" id="board">
     <!-- TO DO -->
-    <div class="column col-todo" data-col="todo" ondragover="onDragOver(event)" ondrop="onDrop(event, 'todo')"
-      ondragleave="onDragLeave(event)">
+    <div class="column col-todo" data-col="todo">
       <div class="col-header">
         <div class="col-title-wrap">
           <div class="col-bar"></div>
@@ -1201,8 +1207,7 @@
     </div>
 
     <!-- IN PROGRESS -->
-    <div class="column col-doing" data-col="doing" ondragover="onDragOver(event)" ondrop="onDrop(event, 'doing')"
-      ondragleave="onDragLeave(event)">
+  <div class="column col-doing" data-col="doing">
       <div class="col-header">
         <div class="col-title-wrap">
           <div class="col-bar"></div>
@@ -1229,8 +1234,7 @@
     </div>
 
     <!-- REVIEW -->
-    <div class="column col-review" data-col="review" ondragover="onDragOver(event)" ondrop="onDrop(event, 'review')"
-      ondragleave="onDragLeave(event)">
+  <div class="column col-review" data-col="review">
       <div class="col-header">
         <div class="col-title-wrap">
           <div class="col-bar"></div>
@@ -1257,8 +1261,7 @@
     </div>
 
     <!-- DONE -->
-    <div class="column col-done" data-col="done" ondragover="onDragOver(event)" ondrop="onDrop(event, 'done')"
-      ondragleave="onDragLeave(event)">
+    <div class="column col-done" data-col="done">
       <div class="col-header">
         <div class="col-title-wrap">
           <div class="col-bar"></div>
@@ -1492,10 +1495,7 @@
       const initials = task.assignee ? task.assignee.toUpperCase().slice(0, 2) : '';
       const color = initials ? getColor(initials) : '';
       return `
-    <div class="card" id="card-${task.id}"
-         draggable="true"
-         ondragstart="onDragStart(event, '${task.id}')"
-         ondragend="onDragEnd(event)">
+     <div class="card" id="card-${task.id}" data-task-id="${task.id}">
       <div class="card-actions">
         <button class="icon-btn" title="Modifier" onclick="editCard('${task.id}')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -1541,6 +1541,7 @@
         document.getElementById('cnt-' + col).textContent = visible.length;
       });
       updateProgress();
+       initSortable(); 
     }
 
     function updateProgress() {
@@ -1648,50 +1649,54 @@
 
     function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
 
-    // --- DRAG AND DROP ---
+  
+// --- DRAG AND DROP (SortableJS — souris + tactile) ---
 
-    function onDragStart(e, id) {
-      draggingId = id;
-      e.dataTransfer.effectAllowed = 'move';
-    }
-    function onDragEnd(e) { draggingId = null; render(); }
-    function onDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
-    function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+let sortableInstances = [];
 
-    function onDrop(e, col) {
-      e.preventDefault();
-      e.currentTarget.classList.remove('drag-over');
+function initSortable() {
+  
+  sortableInstances.forEach(s => s.destroy());
+  sortableInstances = [];
 
-      if (draggingId == null) return;
-
-      // 1. Trouver la tâche dans notre liste locale
-      const t = tasks.find(x => x.id === draggingId);
-
-      if (t && t.col !== col) {
-        // 2. Mettre à jour la colonne (le statut)
-        t.col = col;
-
-        // 3. MISE À JOUR AUTOMATIQUE DE L'AVANCEMENT (%)
-        if (col === 'done') {
-          t.avancement = 100; // Terminé = 100%
-        } else if (col === 'todo') {
-          t.avancement = 0;   // À faire = 0%
-        } else if (col === 'doing' && (t.avancement === 0 || t.avancement === 100)) {
-          t.avancement = 20;  // Si on commence, on met à 20% par défaut
-        }
-        // Note: En 'review', on laisse le pourcentage tel quel
-
-        // 4. Sauvegarder immédiatement dans le localStorage
-        saveToLocalStorage();
-
-        // 5. Rafraîchir l'affichage (colonnes + barre de progression en haut)
-        render();
-
-        toast(`Tâche mise à jour : ${Math.round(t.avancement)}%`);
+  document.querySelectorAll('.col-cards').forEach(colEl => {
+    const instance = new Sortable(colEl, {
+      group: 'kanban',
+      animation: 150,
+      delay: 0,
+      delayOnTouchOnly: true,
+      touchStartThreshold: 5,
+      ghostClass: 'drag-ghost',
+      onEnd: function (evt) {
+        const taskId = evt.item.dataset.taskId;
+        const newCol = evt.to.closest('.column').dataset.col;
+        handleTaskMoved(taskId, newCol);
       }
-      draggingId = null;
+    });
+    sortableInstances.push(instance);
+  });
+}
+
+function handleTaskMoved(taskId, col) {
+  const t = tasks.find(x => x.id === taskId);
+
+  if (t && t.col !== col) {
+    t.col = col;
+
+    if (col === 'done') {
+      t.avancement = 100;
+    } else if (col === 'todo') {
+      t.avancement = 0;
+    } else if (col === 'doing' && (t.avancement === 0 || t.avancement === 100)) {
+      t.avancement = 20;
     }
 
+    saveToLocalStorage();
+    render();
+
+    toast(`Tâche mise à jour : ${Math.round(t.avancement)}%`);
+  }
+}
     // --- FILTRES ET TOAST ---
     function filterPriority(p, el) {
       activeFilter = p;
