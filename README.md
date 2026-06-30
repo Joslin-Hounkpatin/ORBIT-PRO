@@ -46,7 +46,7 @@ Le plus grand risque d'un projet est de consommer son budget plus vite que le te
 
 * **Glisser-Déposer Natif** : Déplacez vos tâches entre les colonnes (À faire → En cours → En révision → Terminé) par simple drag & drop.
 
-* **Synchronisation Bidirectionnelle** : Toute modification dans le Kanban (statut, avancement) se répercute instantanément sur le Dashboard et vice-versa — une seule source de vérité via le localStorage.
+* **Synchronisation Bidirectionnelle** : Toute modification dans le Kanban (statut, avancement) se répercute instantanément sur le Dashboard et vice-versa. Une seule source de vérité via le localStorage.
 
 * **Mise à jour automatique de l'avancement** : Le passage d'une tâche en colonne "Terminé" met automatiquement son avancement à 100%, recalculant en temps réel la barre de progression globale du projet.
 
@@ -54,7 +54,7 @@ Le plus grand risque d'un projet est de consommer son budget plus vite que le te
 
 * **Détection des Retards** : Les tâches dont la date limite est dépassée sont signalées visuellement en rouge directement sur la carte.
 
-* **Responsive Mobile** : Navigation par swipe horizontal sur mobile — chaque colonne occupe l'écran comme sur Trello, avec snap natif entre les colonnes.
+* **Responsive Mobile** : Navigation par swipe horizontal sur mobile. Chaque colonne occupe l'écran comme sur Trello, avec snap natif entre les colonnes.
 
 
 ###### 4\.  **Algorithme de Score de Santé (EVM Logic)**
@@ -85,7 +85,7 @@ Calcul dynamique du statut (**Sain, Vigilance, Critique**) basé sur la méthode
 
 1. Créez un projet dans le Dashboard
 2. Ajoutez vos tâches avec budget et responsable
-3. Pilotez l'avancement depuis le Kanban — tout se synchronise automatiquement
+3. Pilotez l'avancement depuis le Kanban, tout se synchronise automatiquement
 
 
 ##### &#x20;**Stack Technique**
