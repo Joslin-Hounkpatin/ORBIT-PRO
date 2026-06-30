@@ -9,7 +9,7 @@
   <meta name="author" content="Joslin Hounkpatin" />
 
   <link rel="icon" type="image/png" href="favicon orbit.png">
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <title>ORBIT PRO - Kanban | Project Intelligence Engine</title>
   <style>
     :root {
@@ -668,11 +668,11 @@
       min-height: 60px;
     }
 
-.drag-ghost {
-  opacity: 0.4;
-  background: var(--accent-light) !important;
-  border: 2px dashed var(--accent) !important;
-}
+    .drag-ghost {
+      opacity: 0.4;
+      background: var(--accent-light) !important;
+      border: 2px dashed var(--accent) !important;
+    }
 
 
     .card-priority {
@@ -1207,7 +1207,7 @@
     </div>
 
     <!-- IN PROGRESS -->
-  <div class="column col-doing" data-col="doing">
+    <div class="column col-doing" data-col="doing">
       <div class="col-header">
         <div class="col-title-wrap">
           <div class="col-bar"></div>
@@ -1234,7 +1234,7 @@
     </div>
 
     <!-- REVIEW -->
-  <div class="column col-review" data-col="review">
+    <div class="column col-review" data-col="review">
       <div class="col-header">
         <div class="col-title-wrap">
           <div class="col-bar"></div>
@@ -1541,7 +1541,7 @@
         document.getElementById('cnt-' + col).textContent = visible.length;
       });
       updateProgress();
-       initSortable(); 
+      initSortable();
     }
 
     function updateProgress() {
@@ -1649,54 +1649,54 @@
 
     function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
 
-  
-// --- DRAG AND DROP (SortableJS — souris + tactile) ---
 
-let sortableInstances = [];
+    // --- DRAG AND DROP (SortableJS — souris + tactile) ---
 
-function initSortable() {
-  
-  sortableInstances.forEach(s => s.destroy());
-  sortableInstances = [];
+    let sortableInstances = [];
 
-  document.querySelectorAll('.col-cards').forEach(colEl => {
-    const instance = new Sortable(colEl, {
-      group: 'kanban',
-      animation: 150,
-      delay: 0,
-      delayOnTouchOnly: true,
-      touchStartThreshold: 5,
-      ghostClass: 'drag-ghost',
-      onEnd: function (evt) {
-        const taskId = evt.item.dataset.taskId;
-        const newCol = evt.to.closest('.column').dataset.col;
-        handleTaskMoved(taskId, newCol);
-      }
-    });
-    sortableInstances.push(instance);
-  });
-}
+    function initSortable() {
 
-function handleTaskMoved(taskId, col) {
-  const t = tasks.find(x => x.id === taskId);
+      sortableInstances.forEach(s => s.destroy());
+      sortableInstances = [];
 
-  if (t && t.col !== col) {
-    t.col = col;
-
-    if (col === 'done') {
-      t.avancement = 100;
-    } else if (col === 'todo') {
-      t.avancement = 0;
-    } else if (col === 'doing' && (t.avancement === 0 || t.avancement === 100)) {
-      t.avancement = 20;
+      document.querySelectorAll('.col-cards').forEach(colEl => {
+        const instance = new Sortable(colEl, {
+          group: 'kanban',
+          animation: 150,
+          delay: 0,
+          delayOnTouchOnly: true,
+          touchStartThreshold: 5,
+          ghostClass: 'drag-ghost',
+          onEnd: function (evt) {
+            const taskId = evt.item.dataset.taskId;
+            const newCol = evt.to.closest('.column').dataset.col;
+            handleTaskMoved(taskId, newCol);
+          }
+        });
+        sortableInstances.push(instance);
+      });
     }
 
-    saveToLocalStorage();
-    render();
+    function handleTaskMoved(taskId, col) {
+      const t = tasks.find(x => x.id === taskId);
 
-    toast(`Tâche mise à jour : ${Math.round(t.avancement)}%`);
-  }
-}
+      if (t && t.col !== col) {
+        t.col = col;
+
+        if (col === 'done') {
+          t.avancement = 100;
+        } else if (col === 'todo') {
+          t.avancement = 0;
+        } else if (col === 'doing' && (t.avancement === 0 || t.avancement === 100)) {
+          t.avancement = 20;
+        }
+
+        saveToLocalStorage();
+        render();
+
+        toast(`Tâche mise à jour : ${Math.round(t.avancement)}%`);
+      }
+    }
     // --- FILTRES ET TOAST ---
     function filterPriority(p, el) {
       activeFilter = p;
